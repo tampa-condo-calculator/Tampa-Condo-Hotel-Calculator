@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Condo-Hotel Pro Forma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: compact single column — unit picker, two-column assumptions (yours vs standard), highlight strip, 2026–2034 table, notes, disclaimers. */
+:root{
+  --bg:#f7f6f2; --surface:#ffffff; --ink:#15130f; --muted:#625c50; --line:#e4dfd3;
+  --gold:#94752b; --gold-soft:#f3ecd9; --edit:#1d4f86; --edit-soft:#e9f0f9; --neg:#9a3324;
+  --hl-bg:#1b1914; --hl-fg:#f4efe3; --hl-num:#e2bf6b; --hl-muted:#b8ae99; --hl-line:#3a352b;
+  --display:"Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --body:"Jost", "Helvetica Neue", Arial, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f0e0c; --surface:#181612; --ink:#ece6d8; --muted:#a39b8a; --line:#2e2a22;
+  --gold:#d2ad5a; --gold-soft:#2a2416; --edit:#8db8ea; --edit-soft:#16212f; --neg:#e48a74; --hl-bg:#2a2416; --hl-fg:#f4efe3; --hl-num:#f0cf7e; --hl-muted:#b8ae99; --hl-line:#4a4130; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f0e0c; --surface:#181612; --ink:#ece6d8; --muted:#a39b8a; --line:#2e2a22;
+  --gold:#d2ad5a; --gold-soft:#2a2416; --edit:#8db8ea; --edit-soft:#16212f; --neg:#e48a74; --hl-bg:#2a2416; --hl-fg:#f4efe3; --hl-num:#f0cf7e; --hl-muted:#b8ae99; --hl-line:#4a4130; color-scheme:dark}
+
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.45}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:20px 40px;display:flex;flex-direction:column;gap:16px}
+h1,h2,h3{font-family:var(--display);font-weight:600;margin:0;text-wrap:balance;letter-spacing:.01em}
+h1{font-size:clamp(1.5rem,3.6vw,2rem);line-height:1.1}
+h2{font-size:1.2rem;line-height:1.2}
+h3{font-size:.98rem}
+.eyebrow{font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.lead{color:var(--muted);max-width:70ch;margin:4px 0 0;font-size:.86rem}
+.hint{color:var(--muted);font-size:.78rem;margin:2px 0 0;max-width:76ch}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:12px 14px;min-width:0}
+.rule{height:1px;background:linear-gradient(90deg,var(--gold),transparent);border:0;margin:0}
+header{display:flex;flex-direction:column;gap:8px}
+
+/* fields */
+label.f{display:flex;flex-direction:column;gap:2px;font-size:.74rem;font-weight:500;color:var(--muted);min-width:0}
+input,select{font:inherit;font-size:.86rem;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:3px;padding:4px 7px;width:100%;box-sizing:border-box}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.ed input,.ed select{background:var(--edit-soft);border-color:color-mix(in srgb,var(--edit) 30%,var(--line));font-family:var(--mono);font-variant-numeric:tabular-nums}
+.ed.changed input,.ed.changed select{border-color:var(--edit);box-shadow:inset 3px 0 0 var(--edit)}
+.sug{display:flex;justify-content:space-between;gap:6px;font-size:.68rem;color:var(--muted);font-weight:400;flex-wrap:wrap}
+.sug button{all:unset;cursor:pointer;color:var(--edit);font-weight:500}
+.sug button[hidden]{display:none}
+.fx output{display:block;font-family:var(--mono);font-size:.86rem;font-variant-numeric:tabular-nums;color:var(--gold);background:var(--gold-soft);border:1px solid color-mix(in srgb,var(--gold) 30%,var(--line));border-radius:3px;padding:4px 7px}
+.chip{display:inline-block;font-family:var(--body);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;padding:1px 5px;border-radius:2px;background:var(--gold-soft);color:var(--gold);font-weight:600}
+.chip.you{background:var(--edit-soft);color:var(--edit)}
+
+/* unit picker */
+.unit{padding:10px 14px}
+.unit-h{font-family:var(--body);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:6px}
+.unitgrid{display:grid;grid-template-columns:auto minmax(260px,340px) 140px minmax(0,1fr);gap:12px;align-items:start}
+@media (max-width:760px){.unitgrid{grid-template-columns:1fr 1fr}.unitgrid .f:first-child,.facts{grid-column:1 / -1}}
+.types{display:inline-flex;border:1px solid var(--line);border-radius:3px;overflow:hidden;width:max-content}
+.types button{font:inherit;font-size:.8rem;font-weight:500;cursor:pointer;padding:4px 10px;border:0;border-right:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.types button:last-child{border-right:0}
+.types button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.facts{margin:0;display:flex;flex-wrap:nowrap;justify-content:flex-end;gap:12px;padding-left:12px;border-left:1px solid var(--line);white-space:nowrap}
+@media (max-width:900px){.facts{flex-wrap:wrap;gap:6px 14px}}
+@media (max-width:760px){.facts{justify-content:flex-start;padding:8px 0 0;border-left:0;border-top:1px solid var(--line)}}
+.facts div{display:flex;flex-direction:column}
+.facts dt{font-size:.6rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.facts dd{margin:0;font-family:var(--mono);font-size:.84rem;font-variant-numeric:tabular-nums}
+
+/* assumptions */
+.two{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:12px}
+@media (max-width:820px){.two{grid-template-columns:1fr}}
+.grp{display:flex;flex-direction:column;gap:6px}
+.grp + .grp{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.grp h3{display:flex;align-items:baseline;gap:8px}
+.fields{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px 12px;align-items:start}
+.fields.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:560px){.fields,.fields.three{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.fields > .f > input,.fields > .f > select,.fx output{height:28px;line-height:18px;box-sizing:border-box}
+.fields > .f > span:first-child,.fields > label.f{white-space:nowrap}
+.fields .sug{white-space:normal}
+.fixed dl{margin:0;display:grid;gap:6px}
+.fixed dl div{display:flex;align-items:baseline;gap:6px;padding-bottom:6px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.fixed dl div:last-child{border-bottom:0;padding-bottom:0}
+.fixed dt{font-weight:500;font-size:.8rem;white-space:nowrap}
+.fixed dd{margin:0;font-size:.68rem;color:var(--muted);flex:1;min-width:0}
+.fixed .v{font-family:var(--mono);font-weight:500;font-size:.8rem;color:var(--gold);font-variant-numeric:tabular-nums;white-space:nowrap;margin-left:auto}
+.resetall{font:inherit;font-size:.76rem;cursor:pointer;background:none;border:1px solid var(--edit);color:var(--edit);padding:3px 9px;border-radius:3px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.74rem;color:var(--muted);align-items:center}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:-1px;margin-right:5px}
+.bar{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap}
+
+/* market boxes */
+.market{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:820px){.market{grid-template-columns:1fr}}
+.market .panel{display:flex;flex-direction:column;gap:6px}
+.mtbl{overflow-x:auto}
+table.mini{min-width:0;width:100%;border-collapse:collapse}
+table.mini th,table.mini td{position:static;min-width:0;max-width:none;padding:3px 5px;font-size:.78rem;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+table.mini th:first-child,table.mini td:first-child{text-align:left;font-family:var(--body);white-space:normal}
+table.mini td{font-family:var(--mono)}
+table.mini td small{display:block;font-size:.66rem;color:var(--muted)}
+table.hvs td{font-weight:700}
+table.hvs td small,table.hvs td:first-child{font-weight:400}
+table.mini td:first-child small{font-size:.62rem;font-style:italic}
+table.mini th small{display:block;font-weight:400;letter-spacing:0;text-transform:none;color:var(--gold)}
+.band{display:flex;align-items:center;gap:12px;padding:8px 12px;background:var(--gold-soft);border-left:3px solid var(--gold);font-size:.8rem}
+.band b{font-family:var(--body);font-size:1.25rem;font-weight:700;color:var(--gold);white-space:nowrap}
+.hint.nw{font-size:.72rem}
+.hint.one{white-space:nowrap;font-size:.7rem;letter-spacing:-.005em}
+@media (max-width:560px){.hint.one{white-space:normal}}
+.fine{margin:0;font-size:.68rem;color:var(--muted);line-height:1.4}
+
+
+/* assumptions, compact */
+.asm{display:flex;flex-direction:column;gap:10px}
+.mx{display:grid;grid-template-columns:minmax(90px,auto) repeat(4,minmax(0,1fr));gap:4px 8px;align-items:start}
+.mx-y{font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:center;align-self:end}
+.mx-c{align-self:end}
+.mx-l{font-size:.8rem;font-weight:500;padding-top:5px}
+.mc{display:flex;flex-direction:column;gap:1px;min-width:0}
+.mc input,.mc output{text-align:center}
+.asm .fields{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px 10px;padding-top:10px;border-top:1px solid var(--line)}
+@media (max-width:560px){.mx{grid-template-columns:repeat(4,minmax(0,1fr))}.mx-c,.mx-l{grid-column:1 / -1}.mx-c{order:-1}.asm .fields{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.fl{white-space:nowrap}
+.combo{display:flex;gap:4px}
+.combo select{flex:0 0 auto;width:auto;padding:4px 3px;font-family:var(--body)}
+.combo input{flex:1;min-width:0}
+.mc input,.mc output,.sfx input,.combo select,.combo input,.asm .f > input,.asm .fx > output{height:28px;line-height:18px;box-sizing:border-box}
+.ed .sug{min-height:13px;line-height:13px}
+.ed:not(.changed) .sug{visibility:hidden}
+.ed .sug button{font-size:.66rem}
+.note{font-size:.66rem;color:var(--muted);min-height:13px;line-height:13px}
+.fixed h3{margin-bottom:6px}
+
+.hvs-head{display:flex;align-items:center;gap:10px}
+.hvs-head img{display:block;border-radius:2px;flex:none}
+.hvs-head h2{line-height:1.1;flex:1;min-width:0}
+.hvs-addr{text-align:right;align-self:flex-start;font-size:.62rem;line-height:1.35}
+@media (max-width:560px){.hvs-head{flex-wrap:wrap}.hvs-addr{text-align:left;flex-basis:100%}}
+.sfx{position:relative;display:block}
+.sfx input{padding-right:18px}
+.sfx i{position:absolute;right:7px;top:50%;transform:translateY(-50%);font-style:normal;font-family:var(--mono);font-size:.8rem;color:var(--muted);pointer-events:none}
+.f.fx > .fl{font-size:.74rem;font-weight:500;color:var(--muted)}
+.asm .f > select{height:28px;box-sizing:border-box;font-family:var(--body)}
+
+/* acknowledgment gate */
+.gate{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:16px;padding-top:calc(16px + env(safe-area-inset-top,0px));padding-bottom:calc(16px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--bg) 55%,transparent);backdrop-filter:blur(2px)}
+.gate[hidden]{display:none!important}
+.gate-card{max-width:520px;width:100%;background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:6px;padding:20px 22px;box-shadow:0 18px 50px rgba(0,0,0,.25);display:flex;flex-direction:column;gap:10px}
+.gate-card p{margin:0;font-size:.88rem;line-height:1.55}
+.gate-q{font-weight:600}
+.gate-btns{display:flex;gap:8px;flex-wrap:wrap}
+.gate-btns button{font:inherit;font-size:.86rem;font-weight:600;cursor:pointer;padding:8px 16px;border-radius:4px}
+.gate-yes{background:var(--ink);color:var(--bg);border:1px solid var(--ink)}
+.gate-no{background:none;color:var(--ink);border:1px solid var(--line)}
+.gate-msg{color:var(--neg);font-size:.8rem!important;font-weight:500}
+.wrap[inert]{filter:blur(5px);user-select:none;pointer-events:none}
+:root:has(.gate:not([hidden])){overflow:hidden}
+.ack{margin:6px 0 0;font-size:.74rem;color:var(--muted);max-width:96ch;padding:6px 10px;border-left:2px solid var(--gold);background:var(--gold-soft)}
+.srcbtn{all:unset;cursor:pointer;font-size:.62rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--edit);border-bottom:1px dotted var(--edit);line-height:1.2}
+.srcbtn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.srcbtn[aria-expanded="true"]{color:var(--gold);border-color:var(--gold)}
+.srcbox{flex-basis:100%;margin:4px 0 0;padding:6px 8px;font-size:.7rem;line-height:1.45;color:var(--ink);background:var(--gold-soft);border-left:2px solid var(--gold)}
+.srcbox a{color:var(--edit)}
+.reack{all:unset;cursor:pointer;align-self:flex-start;margin-top:4px;font-size:.7rem;font-weight:600;color:var(--edit);border-bottom:1px dotted var(--edit)}
+.reack:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.avail{display:inline-flex;align-items:center;gap:4px;margin-left:6px;font-size:.66rem;color:var(--muted);font-weight:400}
+.avail i{width:7px;height:7px;border-radius:50%;background:#32cd32;display:inline-block}
+/* highlights */
+.hl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--hl-line);border-radius:4px;overflow:hidden}
+@media (max-width:760px){.hl{grid-template-columns:repeat(2,minmax(0,1fr))}.hl .refi{grid-column:1 / -1}}
+.hl div{padding:12px 14px;background:var(--hl-bg);color:var(--hl-fg);min-width:0}
+.hl span{display:block;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--hl-muted);line-height:1.35;min-height:2.7em}
+.hl b{display:block;font-family:var(--body);font-size:1.7rem;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums;color:var(--hl-num);margin-top:2px}
+.hl small{display:block;font-size:.74rem;color:var(--hl-muted)}
+.hl .pair{display:flex;gap:14px;padding:0;background:none}
+.hl .pair p{margin:0;display:flex;flex-direction:column;min-width:0}
+.hl .pair b{font-size:1.35rem}
+.hl .pair p + p{padding-left:14px;border-left:1px solid var(--hl-line)}
+.hl .pair em{font-style:normal;font-size:.64rem;letter-spacing:.06em;text-transform:uppercase;color:var(--hl-muted)}
+.hl .gain{margin-top:6px;padding-top:6px;border-top:1px solid var(--hl-line)}
+.hl .gain strong{color:var(--hl-num);font-family:var(--mono)}
+.hl .refi dl{display:grid;grid-template-columns:1fr auto;gap:1px 12px;margin:8px 0 0;padding-top:6px;border-top:1px solid var(--hl-line);font-size:.74rem}
+.hl .refi dt{color:var(--hl-muted)}
+.hl .refi dd{margin:0;text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--hl-fg)}
+.hl .refi .tot{font-weight:700;color:var(--hl-num);border-top:1px solid var(--hl-line);padding-top:1px}
+
+/* table */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:4px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-variant-numeric:tabular-nums}
+th,td{padding:4px 7px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line);font-size:.78rem}
+td{font-family:var(--mono)}
+th:first-child,td:first-child{text-align:left;font-family:var(--body);position:sticky;left:0;background:var(--surface);white-space:nowrap;min-width:240px;z-index:1}
+thead th{font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+thead th small{display:block;font-weight:400;letter-spacing:0;text-transform:none;color:var(--gold)}
+tr.sec td{font-family:var(--display);font-size:.9rem;font-weight:600;color:var(--gold);padding-top:8px;border-bottom:1px solid var(--gold)}
+tr.sub td{color:var(--muted);font-size:.7rem}
+tr.tot td,tr.tot td:first-child{font-weight:600;background:var(--gold-soft)}
+tr.key td{font-weight:600}
+td.neg{color:var(--neg)}
+td.na{color:var(--muted)}
+.lbl small{display:inline;margin-left:5px;color:var(--muted);font-size:.64rem}
+.lbl small::before{content:"["}
+.lbl small::after{content:"]"}
+
+/* notes */
+ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;display:grid;gap:3px;max-width:86ch}
+.disc{display:grid;gap:8px;font-size:.7rem;color:var(--muted);max-width:96ch}
+.disc p{margin:0}
+.disc .caps{text-transform:uppercase;letter-spacing:.02em}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+
+<div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-h" aria-describedby="gate-t">
+  <div class="gate-card">
+    <div class="eyebrow">Required before use</div>
+    <h2 id="gate-h">Acknowledgment</h2>
+    <p id="gate-t">This calculator is for illustration and education only. Any figure changed from a suggestion is the user's own assumption. Results are not a forecast, guarantee or representation of any developer, seller, broker or hotel operator, and nothing here is tax, legal, financing or investment advice. Consult your own advisors before purchasing.</p>
+    <p class="gate-q">Do you acknowledge and agree?</p>
+    <div class="gate-btns">
+      <button type="button" id="gateYes" class="gate-yes">I acknowledge</button>
+      <button type="button" id="gateNo" class="gate-no">I do not acknowledge</button>
+    </div>
+    <p class="gate-msg" id="gateMsg" role="alert" hidden>You must acknowledge this statement to use the calculator.</p>
+  </div>
+</div>
+
+<div class="wrap" id="app" inert aria-hidden="true">
+  <header>
+    <div>
+      <div class="eyebrow">Condo-hotel investment · Downtown Tampa</div>
+      <h1>Five-Year Projected Growth &amp; Income</h1>
+      <p class="ack">This calculator is for illustration and education only. Any figure changed from a suggestion is the user's own assumption. Results are not a forecast, guarantee or representation of any developer, seller, broker or hotel operator, and nothing here is tax, legal, financing or investment advice. Consult your own advisors before purchasing.</p>
+      <button type="button" class="reack" id="reAck">Show acknowledgment again</button>
+      <p class="lead">Every blue field starts at a suggested figure and is yours to change. Gold figures are standard suggestions for the Tampa market.</p>
+    </div>
+    <hr class="rule">
+  </header>
+
+  <!-- UNIT -->
+  <section class="panel unit" aria-labelledby="h-unit">
+    <h2 id="h-unit" class="unit-h">Potential purchased unit</h2>
+    <div class="unitgrid">
+      <div class="f">
+        <span>Unit type</span>
+        <div class="types" role="group" aria-label="Unit type">
+          <button type="button" data-type="studio" aria-pressed="false">Studio</button>
+          <button type="button" data-type="one" aria-pressed="false">1 Bed</button>
+          <button type="button" data-type="two" aria-pressed="true">2 Bed</button>
+        </div>
+      </div>
+      <label class="f" for="plan">Available unit
+        <select id="plan"></select>
+      </label>
+      <label class="f ed" for="price">Purchase price
+        <input id="price" type="text" inputmode="numeric" autocomplete="off">
+        <span class="sug"><span id="s-price"></span><button type="button" data-reset="price" hidden>Reset</button></span>
+      </label>
+      <dl class="facts" id="facts"></dl>
+    </div>
+  </section>
+
+  <!-- MARKET -->
+  <section class="market" aria-label="Market data">
+    <div class="panel">
+      <div class="hvs-head">
+        <img src="data:image/png;base64,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iW88deHcuXv/7k8XawZT79kK9GlMnItBCzNNPKNMTpx44omxF14YVNchiEomi2yLzLpk+ycfHXrg7lirspl7BJMovl+RzBw6dOKP/mBucrK5etXmH/7E7k9+YsPO3fCOwSTxQGycPv3O/hdP7H/h9NETrWb7B3/2Z8++/tq7bx2VNGnRIJIACcVQ7gxXMWEh3DztUmaeIp5ajTz3wsG5I0eHd26/49M/PHzfnUGlvF0YHX/zsT95+/lnktmmuzDW71JHA9inmH3j8PR7o+66zTf/0Cd3PXR/9FkAFHDN5uGvPn706Sfkwvns4lS92fzOl782cONHbvobn1z94C05XNqJMhEmxw7+wZ+OPv9K6/S7TlObNy4s8CUuxrOvvjbWbt32Ez+27oFbCyCBtGcm3/qTr5w48Py5PKy+685H/t5nN953W2i2j/3Ft04/9+LM1Cyr2dCOLTd89K49P/EjO370U2PHTkqODbs/8vahg21FEHo4I4IAAkc6dreLldBBP7Np8/sA3dku5plelAFTBsXUDC6MTr5++N2jJzbds8/3DRTNtoCH/tfvv/r5/569d1bHJnyRq9McFgCnTmfbuHBx8siJEwffGNl5fW3zhtiIiejxJ7/57V/5D/L2EZkYt1bTxdg6fXr89TePHnx1cOumVZs3xmawEB3CoT/841d+7TcG33u3ns9VVcv8tHzCcofMIFUaJibOvPHm0TcPb9m3NxvoD+MTT33uc0f+xxf07Gh6045H/uU/Xbf31vbpC8/9p99867d/R998C6feLY4dv/DKocPffmbq3PnV2zet3rm9vnY90uzdp58tXnurL9XObt7FYYHme79NriB1JeEdl/45CNuKtoglLq2kA/X6+NnTU+fOpE7VSyjaY8eOVb301avVLK04rZB1apWamKTepVky2FdtT06MnjolKt6pOlx4751aPre+XutPs8Q5Fa6qpBtqWfHO8de/9GVpzjIFPVQkn50bdn5koCaeEVEXM3od8oW5Y5K5jQN97bGxxuRkkiRHnz9w+i+e3JhV49DgnT/+Y2tu3I3AF//wsaN/9mfDauhPWXd9fcn6ils7NXH697747K98bvLgEebBaI7qRAmJixD+oCzqlRRnFfCEBz2ZmKVkEmIx3QAhTmMR8tnZlFCa0pSly6GW9CeNDClDzayYaQWLUQCV5uysi1FJb6xS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" alt="HVS logo" width="52" height="43">
+        <h2>HVS Market Research</h2>
+        <p class="fine hvs-addr">HVS Consulting &amp; Valuation Division<br>of CHR Consulting, Inc.<br>4120 10th Avenue North<br>St. Petersburg, Florida 33713</p>
+      </div>
+      <p class="hint nw one">Outside feasibility study · projected average daily rates for Hotel ORA + Private Residences</p>
+      <div class="mtbl">
+        <table class="mini hvs">
+          <thead><tr><th>Room type</th><th>2030<small>63% occ.</small></th><th>2031<small>70% occ.</small></th><th>2032<small>75% occ.</small></th></tr></thead>
+          <tbody>
+            <tr><td>Studio<small>Projected yearly room revenue</small></td><td>$519<small>$119,344</small></td><td>$555<small>$141,802</small></td><td>$593<small>$162,333</small></td></tr>
+            <tr><td>One Bedroom<small>Projected yearly room revenue</small></td><td>$564<small>$129,692</small></td><td>$603<small>$154,066</small></td><td>$645<small>$176,568</small></td></tr>
+            <tr><td>Two Bedroom<small>Projected yearly room revenue</small></td><td>$955<small>$219,602</small></td><td>$1,021<small>$260,865</small></td><td>$1,092<small>$298,935</small></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="fine">HVS Consulting &amp; Valuation Division of CHR Consulting, Inc., report prepared February 1, 2025. HVS used the extraordinary assumption that average rates rise 7.0% a year, in line with the competitive group's compounded growth from 2016 to 2023, except 2030, which assumes no growth while new supply enters the market. Projections are estimates, not guarantees; actual results may vary materially.</p>
+    </div>
+    <div class="panel">
+      <div class="hvs-head">
+        <h2>Comparable suites nearby</h2>
+        <p class="fine hvs-addr">Water Street luxury hotels<br>Published weekday rates<br>Aug 17–19, 2026 · off-peak</p>
+      </div>
+      <div class="mtbl">
+        <table class="mini">
+          <thead><tr><th>Hotel</th><th>Suite</th><th>View</th><th>Sleeps</th><th>Per night</th></tr></thead>
+          <tbody>
+            <tr><td>JW Marriott</td><td>2 Bed</td><td>City</td><td>6</td><td><b>$1,482</b></td></tr>
+            <tr><td>JW Marriott</td><td>1 Bed corner</td><td>Water</td><td>4</td><td><b>$3,134</b></td></tr>
+            <tr><td>The EDITION</td><td>2 Bed</td><td>City</td><td>6</td><td><b>$2,359</b></td></tr>
+            <tr><td>The EDITION</td><td>1 Bed</td><td>Water</td><td>4</td><td><b>$3,505</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="band" id="compBand"></div>
+      <p class="fine" style="text-align:center">Source: rates listed on the JW Marriott Tampa Water Street and Tampa EDITION websites. Hotel rates change daily.</p>
+    </div>
+  </section>
+
+  <!-- ASSUMPTIONS -->
+  <section aria-labelledby="h-asm" style="display:flex;flex-direction:column;gap:8px">
+    <div class="bar">
+      <div>
+        <h2 id="h-asm">Assumptions</h2>
+        <div class="legend" style="margin-top:3px">
+          <span><i class="sw" style="background:var(--edit-soft);border:1px solid var(--edit)"></i>Yours to change</span>
+          <span><i class="sw" style="background:var(--gold-soft);border:1px solid var(--gold)"></i>Standard suggestion · Tampa market</span>
+        </div>
+      </div>
+      <button type="button" class="resetall" id="resetAll">Reset all to suggested</button>
+    </div>
+
+    <div class="two">
+      <div class="panel asm">
+        <div class="mx" role="group" aria-label="Room rate and occupancy, HVS Study Projections">
+          <div class="mx-c"><span class="chip">HVS Study Projections</span></div><div class="mx-y">2030</div><div class="mx-y">2031</div><div class="mx-y">2032</div><div class="mx-y">2033–34</div>
+          <div class="mx-l">Room rate</div>
+          <label class="ed mc" for="adr1"><input id="adr1" type="text" inputmode="numeric" autocomplete="off" aria-label="2030 room rate"><span class="sug"><button type="button" data-reset="adr1">↺ <span data-s="adr1"></span></button></span></label>
+          <div class="fx mc"><output id="adr2"></output></div>
+          <div class="fx mc"><output id="adr3"></output></div>
+          <div class="fx mc"><output>+7% / yr</output></div>
+          <div class="mx-l">Occupancy</div>
+          <label class="ed mc" for="occ1"><span class="sfx"><input id="occ1" type="number" step="1" min="0" max="100" aria-label="2030 occupancy"><i aria-hidden="true">%</i></span><span class="sug"><button type="button" data-reset="occ1">↺ <span data-s="occ1"></span></button></span></label>
+          <label class="ed mc" for="occ2"><span class="sfx"><input id="occ2" type="number" step="1" min="0" max="100" aria-label="2031 occupancy"><i aria-hidden="true">%</i></span><span class="sug"><button type="button" data-reset="occ2">↺ <span data-s="occ2"></span></button></span></label>
+          <label class="ed mc" for="occ3"><span class="sfx"><input id="occ3" type="number" step="1" min="0" max="100" aria-label="2032 occupancy"><i aria-hidden="true">%</i></span><span class="sug"><button type="button" data-reset="occ3">↺ <span data-s="occ3"></span></button></span></label>
+          <label class="ed mc" for="occ4"><span class="sfx"><input id="occ4" type="number" step="1" min="0" max="100" aria-label="2033 to 2034 occupancy"><i aria-hidden="true">%</i></span><span class="sug"><button type="button" data-reset="occ4">↺ <span data-s="occ4"></span></button></span></label>
+        </div>
+        <p class="hint">Only the 2030 rate is editable; later years grow 7% a year per the HVS study.</p>
+
+        <div class="fields">
+          <label class="f ed" for="hkm"><span class="fl">Housekeeping method</span>
+            <select id="hkm"><option value="pct">% of purchase price</option><option value="night">$ per occupied night</option></select>
+            <span class="sug"><button type="button" data-reset="hk">↺ Suggested % of price</button></span>
+            <span id="hkLabel" hidden></span>
+          </label>
+          <div class="f fx"><span class="fl">Project deposit</span><output>40%</output><span class="note">Paid before top-off</span></div>
+          <label class="f ed" for="eq2"><span class="fl">Closing equity % (min 25)</span><input id="eq2" type="number" step="1" min="25" max="100"><span class="sug"><button type="button" data-reset="eq2">↺ <span data-s="eq2"></span></button></span></label>
+          <label class="f ed" for="rate"><span class="fl">Mortgage rate %</span><input id="rate" type="number" step="0.05" min="0"><span class="sug"><button type="button" data-reset="rate">↺ <span data-s="rate"></span></button></span></label>
+          <label class="f ed" for="hkv"><span class="fl" id="hkAmt">Housekeeping % of price</span><input id="hkv" type="number" step="0.1" min="0"><span class="sug"><button type="button" data-reset="hkv">↺ <span data-s="hkv"></span></button></span></label>
+          <label class="f ed" for="appr"><span class="fl">Appreciation %</span><input id="appr" type="number" step="0.25"><span class="sug"><button type="button" data-reset="appr">↺ <span data-s="appr"></span></button></span></label>
+          <label class="f ed" for="cpi"><span class="fl">Inflation %</span><input id="cpi" type="number" step="0.05"><span class="sug"><button type="button" data-reset="cpi">↺ <span data-s="cpi"></span></button></span></label>
+          <label class="f ed" for="cap"><span class="fl">Terminal cap rate %</span><input id="cap" type="number" step="0.25" min="1"><span class="sug"><button type="button" data-reset="cap">↺ <span data-s="cap"></span></button></span></label>
+        </div>
+      </div>
+
+      <aside class="panel fixed" aria-labelledby="h-fixed">
+        <h3 id="h-fixed">Standard suggestions · Tampa market</h3>
+        <dl>
+          <div><dt>Projected management fee</dt><dd>of room revenue</dd><span class="v">15%</span><button type="button" class="srcbtn" aria-expanded="false" aria-controls="src-mgmt">Source</button><p class="srcbox" id="src-mgmt" hidden><b>Source:</b> rental program offering terms. The owner keeps 85% of room revenue and the operator takes 15%, fixed for every year shown.</p></div>
+          <div><dt>Projected HOA</dt><dd>$1.03 / sq ft / mo</dd><span class="v" id="fx-hoa"></span><button type="button" class="srcbtn" aria-expanded="false" aria-controls="src-hoa">Source</button><p class="srcbox" id="src-hoa" hidden><b>Source:</b> the project's published HOA structure, $1.03 per sq ft per month. Includes electric, water, internet, cable, trash, sewer, HOA insurance and HOA maintenance. Annual figure = $1.03 × sq ft × 12.</p></div>
+          <div><dt>Projected insurance</dt><dd>walls-in, $2.00 / sq ft</dd><span class="v" id="fx-ins"></span><button type="button" class="srcbtn" aria-expanded="false" aria-controls="src-ins">Source</button><p class="srcbox" id="src-ins" hidden><b>Estimate, not a quote.</b> The developer's March 2026 due-diligence Q&amp;A cited about $400 a year for basic walls-in coverage. This suggestion uses $2.00 per sq ft a year to allow for liability and loss-of-rents cover on a rental unit. Ask a licensed Florida insurance agent for an HO-6 quote.</p></div>
+          <div><dt>Projected property taxes</dt><dd>19.8428 mills, 85% of value</dd><span class="v" id="fx-tax"></span><button type="button" class="srcbtn" aria-expanded="false" aria-controls="src-tax">Source</button><p class="srcbox" id="src-tax" hidden><b>Rate:</b> 19.8428 mills, the 2025 City of Tampa total millage as published by the Hillsborough County Property Appraiser (<a href="https://www.hcpafl.org" target="_blank" rel="noopener">hcpafl.org</a>). <b>Assessed value:</b> assumed at 85% of the projected 2030 market value, reflecting the cost-of-sale adjustment Florida appraisers typically apply. This is an assumption; the Property Appraiser sets the actual value, and rates change yearly.</p></div>
+          <div><dt>Projected sinking fund</dt><dd>0.5% of price</dd><span class="v" id="fx-sink"></span><button type="button" class="srcbtn" aria-expanded="false" aria-controls="src-sink">Source</button><p class="srcbox" id="src-sink" hidden><b>Estimate.</b> Based on about $30,000 of suite furniture, fixtures and equipment in the developer's budget, replaced roughly every 7 years (about $4,300 a year), expressed as 0.5% of the purchase price. Hotel FF&amp;E reserves are often set at 3–5% of room revenue instead.</p></div>
+        </dl>
+        <p class="hint">Projected year-1 amounts; projected to grow with inflation. Tap Source to see where each figure comes from.</p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- HIGHLIGHTS -->
+  <section aria-labelledby="h-hl" style="display:flex;flex-direction:column;gap:6px">
+    <h2 id="h-hl">At a glance <span class="chip">Projected</span></h2>
+    <div class="hl" id="hl" aria-live="polite"></div>
+    <p class="hint" id="youNote"></p>
+  </section>
+
+  <!-- TABLE -->
+  <section aria-labelledby="h-t" style="display:flex;flex-direction:column;gap:6px">
+    <div>
+      <h2 id="h-t">Projected growth &amp; income, 2026–2034</h2>
+      <p class="hint">Signing in 2026, projected completion and closing late 2029, rental operations 2030–2034.</p>
+      <p class="ack">Financial projections are speculative in nature and based upon subjective decisions and assumptions. Since the illustrative financial projections cover multiple years, such information by its nature becomes less meaningful and reliable with each successive year. Please review the assumptions above. Accordingly, there can be no assurance that the results reflected in the illustrative financial projections will be realized, and actual results may vary materially from those reflected in such illustrative financial projections. As a result, the illustrative financial projections should not be relied on as necessarily predictive of actual future events.</p>
+    </div>
+    <div class="tbl"><table id="t"></table></div>
+  </section>
+
+  <!-- NOTES -->
+  <section class="panel" aria-labelledby="h-basis">
+    <h2 id="h-basis">How the figures are built</h2>
+    <ul class="notes">
+      <li>Room revenue = ADR × occupancy × 365 nights. The 2030 ADR is yours to set (HVS suggestion shown). Each later year grows 7% a year, the HVS study's annual rate, and is not editable. Suggested occupancy follows HVS Market Research (February 1, 2025), held at 75% in years 4–5.</li>
+      <li>Unit list shows only available units (green on the inventory grid printed October 10, 2026), sorted by price. The suggested purchase price is that unit's list price; enter the actual contract price.</li>
+      <li>The project deposit is fixed at 40% of the purchase price before closing. At closing, equity is at least 25%, and the balance is financed over 30 years at the mortgage rate.</li>
+      <li>Cash flow before taxes (a) = net operating income − mortgage payment. Total annual return adds principal paid down (b) and appreciation (c), measured against cash invested.</li>
+      <li>Terminal value = net operating income ÷ cap rate (7% suggested for a condo-hotel suite). Multiple of invested capital = (terminal value − remaining loan + cumulative cash flow) ÷ cash invested. Selling costs are not deducted.</li>
+      <li>Suggested growth figures: 4.0% appreciation reflects a flatter downtown Tampa condo market than the 2021–22 run-up, with new luxury product holding value better than resale. 3.0% inflation sits above the Fed's 2% target to allow for Florida insurance and labor costs. Closing equity has a 25% minimum; 100% means an all-cash purchase.</li>
+      <li>Not included: owner stays, income taxes, depreciation or cost segregation, resort fees, closing and selling costs.</li>
+    </ul>
+  </section>
+
+  <!-- DISCLAIMERS -->
+  <section aria-labelledby="h-disc" style="display:flex;flex-direction:column;gap:8px">
+    <hr class="rule">
+    <h2 id="h-disc">Disclaimers</h2>
+    <div class="disc">
+      <p class="caps">Oral representations cannot be relied upon as correctly stating representations of the developer. For correct representations, make reference to the documents required by Section 718.503, Florida Statutes, to be furnished by a developer to a buyer or lessee.</p>
+      <p>All dimensions, specifications, prices and features are approximations and subject to availability and to change without notice. Stated dimensions may vary from the dimensions of the actual living space. All offers are subject to the terms and conditions of any sales or reservation agreement with the developer. Not an offer for or solicitation where prior registration is required or otherwise prohibited by these statutes. Equal Housing Opportunity.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const usd = v => (v<0?"(":"") + "$" + Math.round(Math.abs(v)).toLocaleString("en-US") + (v<0?")":"");
+  const pct = (v,d=1) => (v*100).toFixed(d) + "%";
+
+  /* interior sizes and representative list prices */
+  /* available units (green) from the inventory grid printed Oct 10, 2026: [unit, type, plan, sq ft, list price, exposure] */
+  const UNITS = [["1802","studio","Dulce",507,731176,"NW"],["1804","studio","Camilla",558,802336,"N"],["1808","one","Contessa",772,1062623,"NE"],["1811","two","Giulia",1048,1328013,"E"],["1812","two","Lucia",1109,1368940,"E"],["1911","two","Giulia",1048,1332360,"E"],["1912","two","Lucia",1109,1373288,"E"],["1913","two","Martina",1151,1435209,"SE"],["1914","studio","Natalia",545,702598,"S"],["1916","studio","Paola",572,814344,"S"],["1917","two","Rosetta",1135,1443903,"SW"],["1918","two","Sofia",1088,1203198,"W"],["1921","studio","Zita",684,999456,"W"],["2010","two","Isabella",1048,1310498,"E"],["2011","two","Giulia",1048,1336708,"E"],["2012","two","Lucia",1109,1377635,"E"],["2013","two","Martina",1151,1439662,"SE"],["2014","studio","Natalia",545,800625,"S"],["2016","studio","Paola",572,818606,"S"],["2017","two","Rosetta",1135,1448250,"SW"],["2018","two","Sofia",1088,1207375,"W"],["2021","studio","Zita",684,1003837,"W"],["2022","studio","Donella",577,902731,"W"],["2101","one","Adriana",803,1065697,"NW"],["2108","one","Contessa",772,1075770,"NE"],["2111","two","Giulia",1048,1341055,"E"],["2112","two","Lucia",1109,1382088,"E"],["2113","two","Martina",1151,1444009,"SE"],["2116","studio","Paola",572,822972,"S"],["2118","two","Sofia",1088,1211552,"W"],["2119","two","Tatiana",1045,1223151,"W"],["2205","two","Daniela",955,1129342,"N"],["2208","one","Contessa",772,1080117,"NE"],["2210","two","Isabella",1048,1319022,"E"],["2211","two","Giulia",1048,1345402,"E"],["2212","two","Lucia",1109,1386435,"E"],["2213","two","Martina",1151,1448356,"SE"],["2215","two","Olivia",878,1091675,"S"],["2216","studio","Paola",572,827234,"S"],["2217","two","Rosetta",1135,1456944,"SW"],["2218","two","Sofia",1088,1215729,"W"],["2219","two","Tatiana",1045,1227498,"W"],["2305","two","Daniela",955,1133620,"N"],["2308","one","Contessa",772,1084465,"NE"],["2310","two","Isabella",1048,1323387,"E"],["2311","two","Giulia",1048,1349855,"E"],["2312","two","Lucia",1109,1390782,"E"],["2313","two","Martina",1151,1452703,"SE"],["2316","studio","Paola",572,831496,"S"],["2317","two","Rosetta",1135,1461398,"SW"],["2318","two","Sofia",1088,1220007,"W"],["2319","two","Tatiana",1045,1231845,"W"],["2405","two","Daniela",955,1137797,"N"],["2408","one","Contessa",772,1088918,"NE"],["2411","two","Giulia",1048,1354202,"E"],["2412","two","Lucia",1109,1395130,"E"],["2413","two","Martina",1151,1457051,"SE"],["2416","studio","Paola",572,835758,"S"],["2417","two","Rosetta",1135,1465745,"SW"],["2505","two","Daniela",955,1141974,"N"],["2508","one","Contessa",772,1093265,"NE"],["2510","two","Isabella",1048,1331911,"E"],["2511","two","Giulia",1048,1358550,"E"],["2512","two","Lucia",1109,1399477,"E"],["2513","two","Martina",1151,1461504,"SE"],["2516","studio","Paola",572,840020,"S"],["2517","two","Rosetta",1135,1470092,"SW"],["2518","two","Sofia",1088,1228361,"W"],["2519","two","Tatiana",1045,1240539,"W"],["2601","one","Adriana",803,1087539,"NW"],["2605","two","Daniela",955,1146151,"N"],["2608","one","Contessa",772,1097612,"NE"],["2611","two","Giulia",1048,1362897,"E"],["2612","two","Lucia",1109,1403930,"E"],["2613","two","Martina",1151,1465851,"SE"],["2616","studio","Paola",572,844386,"S"],["2617","two","Rosetta",1135,1474439,"SW"],["2619","two","Tatiana",1045,1244993,"W"],["2621","studio","Zita",684,1030221,"W"],["2705","two","Daniela",955,1150429,"N"],["2708","one","Contessa",772,1101959,"NE"],["2710","two","Isabella",1048,1340539,"E"],["2713","two","Martina",1151,1470198,"SE"],["2716","studio","Paola",572,848648,"S"],["2717","two","Rosetta",1135,1478786,"SW"],["2718","two","Sofia",1088,1236714,"W"],["2719","two","Tatiana",1045,1249340,"W"],["2721","studio","Zita",684,1034704,"W"],["2802","studio","Dulce",507,774860,"NW"],["2805","two","Daniela",955,1154606,"N"],["2811","two","Giulia",1048,1371697,"E"],["2816","studio","Paola",572,852910,"S"],["2818","two","Sofia",1088,1240993,"W"],["2821","studio","Zita",684,1039084,"W"],["2902","studio","Dulce",507,779207,"NW"],["2905","two","Daniela",955,1158783,"N"],["2907","studio","Francesca",479,754502,"NE"],["2908","one","Contessa",772,1110760,"NE"],["2916","studio","Paola",572,857172,"S"],["2919","two","Tatiana",1045,1257449,"W"],["2921","studio","Zita",684,1043465,"W"],["3001","one","Adriana",803,1105034,"NW"],["3002","studio","Dulce",507,783554,"NW"],["3005","two","Daniela",955,1162959,"N"],["3016","studio","Paola",572,861434,"S"],["3019","two","Tatiana",1045,1262487,"W"],["3021","studio","Zita",684,1047845,"W"],["3102","studio","Dulce",507,787902,"NW"],["3105","two","Daniela",955,1167136,"N"],["3108","one","Contessa",772,1119454,"NE"],["3116","studio","Paola",572,865800,"S"],["3119","two","Tatiana",1045,1266834,"W"],["3201","one","Adriana",803,1113729,"NW"],["3216","studio","Paola",572,870062,"S"],["3218","two","Sofia",1088,1257699,"W"],["3302","studio","Dulce",507,796702,"NW"],["3304","studio","Camilla",558,865292,"N"],["3305","two","Daniela",955,1175591,"N"],["3313","two","Martina",1151,1496387,"SE"],["3314","studio","Natalia",545,857457,"S"],["3316","studio","Paola",572,874323,"S"],["3402","studio","Dulce",507,801049,"NW"],["3404","studio","Camilla",558,869571,"N"],["3408","one","Contessa",772,1132602,"NE"],["3413","two","Martina",1151,1500734,"SE"],["3414","studio","Natalia",545,861804,"S"],["3416","studio","Paola",572,878585,"S"],["3505","two","Daniela",955,1183945,"N"],["3508","one","Contessa",772,1136949,"NE"],["3513","two","Martina",1151,1505188,"SE"],["3516","studio","Paola",572,882847,"S"],["3519","two","Tatiana",1045,1284329,"W"]];
+  const byType = t => UNITS.filter(u=>u[1]===t);
+  const lowest = t => byType(t).reduce((a,b)=>b[4]<a[4]?b:a)[0];
+  const TYPE_NAME = {studio:"Studio", one:"One Bedroom", two:"Two Bedroom"};
+  const HVS = {studio:[519,555,593], one:[564,603,645], two:[955,1021,1092]};
+  const HK_NIGHT = {studio:45, one:55, two:75};
+
+  const FIXED = {mgmt:.15, hoaRate:1.03, insPsf:2.00, mills:.0198428, assess:.85, sink:.005};
+  const YEARS = [2026,2027,2028,2029,2030,2031,2032,2033,2034];
+  const OPS0 = 2030, TOPOFF = 2028;
+
+  const S = {type:"two", unit:lowest("two")};
+  const sugg = {};
+  const ADR_G = 0.07; /* HVS annual rate growth */
+  const NUM = ["price","adr1","occ1","occ2","occ3","occ4","hkv","eq2","rate","appr","cpi","cap"];
+  const DEPOSIT = 0.40, MIN_EQ = 25;
+
+  const MONEY = ["price","adr1"];
+  const val = k => Number(String($(k).value).replace(/[^0-9.\-]/g,"")) || 0;
+  const fmtPrice = v => v ? "$" + Math.round(v).toLocaleString("en-US") : "";
+  function planRow(){ return UNITS.find(u=>u[0]===S.unit) || byType(S.type)[0]; }
+
+  function setSuggestions(){
+    const h = HVS[S.type];
+    Object.assign(sugg,{
+      price:planRow()[4], adr1:h[0], adr2:h[1], adr3:h[2], adrg:7,
+      occ1:63, occ2:70, occ3:75, occ4:75, hkm:"pct",
+      hkv: ($("hkm").value==="night") ? HK_NIGHT[S.type] : 2.5,
+      eq2:40, rate:6.85, appr:4, cpi:3, cap:7
+    });
+  }
+  function fmtSug(k){
+    const v = sugg[k];
+    if(k==="price") return "Suggested " + usd(v);
+    if(k.startsWith("adr") && k!=="adrg") return "HVS " + usd(v);
+    if(k==="hkv") return $("hkm").value==="night" ? "Suggested " + usd(v) + "/night" : "Suggested " + v + "%";
+    if(k.startsWith("occ")) return "HVS " + v + "%";
+    if(k==="eq2") return "Suggested 40%";
+    if(k==="appr") return "Suggested " + v + "% · Tampa estimate";
+    if(k==="cpi") return "Suggested " + v + "%";
+    if(k==="cap") return "Suggested " + v + "%";
+    return "Suggested " + v + "%";
+  }
+  function paintSuggestions(){
+    NUM.forEach(k=>{
+      const s = document.querySelector('[data-s="'+k+'"]') || (k==="price"?$("s-price"):null);
+      if(s) s.textContent = fmtSug(k);
+      const changed = val(k) !== Number(sugg[k]);
+      const wrap = $(k).closest(".ed"); if(wrap) wrap.classList.toggle("changed", changed);
+    });
+    $("hkm").closest(".ed").classList.toggle("changed", $("hkm").value!==sugg.hkm);
+  }
+  function applySuggestions(keys){ keys.forEach(k=>{ $(k).value = MONEY.includes(k) ? fmtPrice(sugg[k]) : sugg[k]; }); }
+
+  function fillPlans(){
+    const list = byType(S.type).slice().sort((a,b)=>a[4]-b[4]);
+    $("plan").innerHTML = list.map(u=>`<option value="${u[0]}">${u[0]} · ${u[2]} · ${u[3].toLocaleString()} sq ft · ${u[5]} · $${u[4].toLocaleString()}</option>`).join("");
+    $("plan").value = S.unit;
+  }
+
+  function model(){
+    const g = val;
+    const P = g("price"), sq = planRow()[3];
+    const adr = [0,1,2,3,4].map(k=>g("adr1")*Math.pow(1+ADR_G,k));
+    const occ = [g("occ1"),g("occ2"),g("occ3"),g("occ4"),g("occ4")].map(x=>x/100);
+    const esc = g("cpi")/100, appr = g("appr")/100, cap = g("cap")/100;
+    const eq1 = DEPOSIT, eq2 = Math.min(1, Math.max(MIN_EQ, g("eq2"))/100), r = g("rate")/100/12;
+    const hkNight = $("hkm").value==="night", hkv = g("hkv");
+
+    const value = y => P*Math.pow(1+appr, y-YEARS[0]);
+    const loan = P*(1-eq2), n = 360;
+    const pmt = loan>0 ? (r>0 ? loan*r/(1-Math.pow(1+r,-n)) : loan/n) : 0;
+    let bal = loan;
+
+    const yr1 = { hoa: FIXED.hoaRate*sq*12, ins: FIXED.insPsf*sq, tax: FIXED.assess*value(OPS0)*FIXED.mills, sink: FIXED.sink*P, hkPct: hkv/100*P };
+
+    const rows = YEARS.map((y,i)=>{
+      const o = {y, value:value(y), appreciation: i===0?0:value(y)-value(y-1)};
+      o.invest = (y<OPS0 ? eq1 : eq2)*P;
+      if(y>=OPS0){
+        const k = y-OPS0, f = Math.pow(1+esc,k);
+        o.adr = adr[k]; o.occ = occ[k];
+        o.rev = o.adr*o.occ*365;
+        o.mgmt = FIXED.mgmt*o.rev;
+        o.hoa = yr1.hoa*f;
+        o.hk = hkNight ? hkv*o.occ*365*f : yr1.hkPct*f;
+        o.ins = yr1.ins*f; o.tax = yr1.tax*f; o.sink = yr1.sink*f;
+        o.exp = o.mgmt+o.hoa+o.hk+o.ins+o.tax+o.sink;
+        o.noi = o.rev-o.exp;
+        let prin = 0;
+        for(let m=0;m<12;m++){ const int = bal*r; const p = Math.min(bal, pmt-int); prin += p; bal -= p; }
+        o.mort = pmt*12; o.prin = prin; o.bal = bal;
+        o.cf = o.noi-o.mort;
+        o.tv = cap>0 ? o.noi/cap : 0;
+      }
+      return o;
+    });
+    let cum = 0, cumCF = 0;
+    rows.forEach(o=>{
+      o.total = (o.cf||0)+(o.prin||0)+o.appreciation;
+      cum += o.total; o.cum = cum;
+      o.retPct = o.invest>0 ? o.total/o.invest : 0;
+      if(o.y>=OPS0){
+        cumCF += o.cf; o.cumCF = cumCF;
+        o.coc = o.invest>0 ? o.cf/o.invest : 0;
+        o.moic = o.invest>0 ? (o.tv - o.bal + cumCF)/o.invest : 0;
+      }
+    });
+    return {rows, yr1, sq, P, loan};
+  }
+
+  function render(){
+    const M = model(), R = M.rows, ops = R.filter(o=>o.y>=OPS0);
+    /* table shows 2026 (signing) then 2030–2034; 2027–2029 appreciation is carried into the 2030 column */
+    const D = R.filter(o=>o.y===YEARS[0] || o.y>=OPS0).map(o=>{
+      if(o.y!==OPS0) return o;
+      const app = R.filter(x=>x.y>YEARS[0] && x.y<=OPS0).reduce((s,x)=>s+x.appreciation,0);
+      const total = o.cf + o.prin + app;
+      return Object.assign({}, o, {appreciation:app, total, retPct: o.invest>0 ? total/o.invest : 0});
+    });
+    $("hkAmt").textContent = $("hkm").value==="night" ? "Housekeeping $ per night" : "Housekeeping % of price";
+    $("facts").innerHTML = [["Price / sq ft",usd(M.P/M.sq)],["HOA / month",usd(M.yr1.hoa/12)],["Projected equity at closing",usd(M.P-M.loan)],["Projected loan at closing",usd(M.loan)]]
+      .map(([a,b])=>`<div><dt>${a}</dt><dd>${b}</dd></div>`).join("");
+    $("fx-hoa").textContent = usd(M.yr1.hoa) + "/yr";
+    $("fx-ins").textContent = usd(M.yr1.ins) + "/yr";
+    $("fx-tax").textContent = usd(M.yr1.tax) + "/yr";
+    $("fx-sink").textContent = usd(M.yr1.sink) + "/yr";
+
+    $("adr2").textContent = usd(ops[1].adr); $("adr3").textContent = usd(ops[2].adr);
+    const comps = S.type==="two" ? [["JW Marriott",1482],["EDITION",2359],"2-bedroom"] : [["JW Marriott",3134],["EDITION",3505],"1-bedroom"];
+    const a1 = val("adr1"), below = c => Math.round((1 - a1/c[1])*100);
+    $("compBand").innerHTML = `<b>${usd(a1)}</b><span>This unit's projected 2030 rate in the model: ${below(comps[0])}% below the JW Marriott and ${below(comps[1])}% below the EDITION ${comps[2]} suite.</span>`;
+    const y1 = ops[0], y5 = ops[ops.length-1];
+    const avgCoc = ops.reduce((s,o)=>s+o.coc,0)/ops.length;
+    const y3 = ops.find(o=>o.y===2032);
+    const gain = y3.tv - y3.invest;
+    const tile = (a,b,c)=>`<div><span>${a}</span><b>${b}</b><small>${c}</small></div>`;
+    const pair = (a,v1,v2,c)=>`<div><span>${a}</span><div class="pair"><p><b>${v1}</b><em>2030 · first year</em></p><p><b>${v2}</b><em>2032 · year 3</em></p></div><small>${c}</small></div>`;
+        $("hl").innerHTML =
+      pair("Projected cash flow<br>Year 1 vs Year 3", usd(y1.cf), usd(y3.cf), "Before taxes, after projected expenses and mortgage") +
+      pair("Projected cash-on-cash<br>Year 1 vs Year 3", pct(y1.coc), pct(y3.coc), "On " + usd(y3.invest) + " invested") +
+      tile("Projected 2032 terminal value<br>minus initial investment", usd(gain), usd(y3.tv) + " terminal value less " + usd(y3.invest) + " invested") +
+      tile("Projected 2032<br>multiple of capital", y3.moic.toFixed(2) + "×", "At 2032, on " + usd(y3.invest) + " invested");
+
+    const changed = NUM.filter(k=>val(k)!==Number(sugg[k])).length + ($("hkm").value!==sugg.hkm?1:0);
+    $("youNote").innerHTML = changed ? `<span class="chip you">Your assumptions</span> ${changed} field${changed>1?"s":""} changed from the suggestion.` : `<span class="chip">Standard</span> Every field is at its suggested value.`;
+
+    const cell = (o,fn) => { if(o.y<OPS0 && !fn.pre) return `<td class="na">—</td>`; const v = fn(o); return `<td class="${(typeof v==="number"&&v<0)?"neg":""}">${fn.f?fn.f(v):usd(v)}</td>`; };
+    const row = (label, fn, cls="") => `<tr class="${cls}"><td class="lbl">${label}</td>${D.map(o=>cell(o,fn)).join("")}</tr>`;
+    const pre = fn => (fn.pre=true, fn);
+    const fmt = (fn,f) => (fn.f=f, fn);
+    const sec = t => `<tr class="sec"><td>${t}</td>${D.map(()=>"<td></td>").join("")}</tr>`;
+    const hkLbl = $("hkm").value==="night" ? `Housekeeping <small>EST ${usd(val("hkv"))} per occupied night</small>` : `Housekeeping <small>EST ${$("hkv").value}% of purchase price</small>`;
+
+    $("t").innerHTML =
+      `<thead><tr><th>Year</th>${D.map(o=>`<th>${o.y}<small>${o.y>=OPS0?"Year "+(o.y-OPS0+1):"Signing"}</small></th>`).join("")}</tr></thead><tbody>` +
+      sec("Revenue") +
+      row("Projected room rate (ADR)", o=>o.adr) +
+      row("Projected occupancy", fmt(o=>o.occ, v=>pct(v,0)), "sub") +
+      row("Projected room revenue", o=>o.rev, "key") +
+      sec("Projected expenses") +
+      row("Management Fee <small>15% of gross revenue</small>", o=>o.mgmt) +
+      row("HOA Fees <small>incl. elec, HOA insurance, water, cable, internet and maintenance</small>", o=>o.hoa) +
+      row(hkLbl, o=>o.hk) +
+      row("Insurance <small>walls-in, liability policy @ $2.00 per sq ft</small>", o=>o.ins) +
+      row("Property Taxes <small>19.8428 mills</small>", o=>o.tax) +
+      row("Sinking Fund Provision <small>wear and tear, replacement of FF&amp;E @ 0.5% of purchase price</small>", o=>o.sink) +
+      row("Total projected expenses", o=>o.exp, "tot") +
+      row("Projected net operating income", o=>o.noi, "tot") +
+      sec("Financing &amp; value") +
+      row("Projected market value", pre(o=>o.value)) +
+      row("Total investment amount <small>deposits, then equity at closing</small>", pre(o=>o.invest)) +
+      row("Mortgage payment <small>30-year, principal &amp; interest</small>", o=>o.mort) +
+      sec("Returns") +
+      row("Projected cash flow before taxes (a)", o=>o.cf, "key") +
+      row("Projected principal repayment (b)", o=>o.prin) +
+      row("Projected property appreciation (c) <small>2030 includes 2027–2029</small>", pre(o=>o.appreciation)) +
+      row("Projected total annual return (a + b + c)", pre(o=>o.total), "tot") +
+      row("Projected cumulative return", pre(o=>o.cum)) +
+      row("Projected annual return on investment", pre(fmt(o=>o.retPct, v=>pct(v)))) +
+      row("Projected cash-on-cash return", fmt(o=>o.coc, v=>pct(v)), "key") +
+      row(`Projected terminal value <small>at a ${val("cap")}% cap rate</small>`, o=>o.tv) +
+      row("Projected multiple of invested capital <small>incl. cumulative cash flow</small>", fmt(o=>o.moic, v=>v.toFixed(2)+"×")) +
+      `</tbody>`;
+    paintSuggestions();
+  }
+
+  function chooseType(t){
+    S.type = t; S.unit = lowest(t);
+    document.querySelectorAll(".types button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.type===t));
+    fillPlans(); setSuggestions();
+    applySuggestions(["price","adr1"]);
+    if($("hkm").value==="night") applySuggestions(["hkv"]);
+    render();
+  }
+  document.querySelectorAll(".types button").forEach(b=>b.addEventListener("click",()=>chooseType(b.dataset.type)));
+  $("plan").addEventListener("change", e=>{ S.unit = e.target.value; setSuggestions(); applySuggestions(["price"]); render(); });
+  NUM.forEach(k=>$(k).addEventListener("input", render));
+  MONEY.forEach(k=>{
+    $(k).addEventListener("input", e=>{
+      const el = e.target, fromEnd = el.value.length - (el.selectionStart ?? el.value.length);
+      el.value = fmtPrice(val(k));
+      const pos = Math.max(1, el.value.length - fromEnd);
+      try{ el.setSelectionRange(pos,pos); }catch(_){}
+    });
+    $(k).addEventListener("blur", ()=>{ $(k).value = fmtPrice(val(k)); });
+  });
+  $("eq2").addEventListener("blur", ()=>{ const v = val("eq2"); if(v < MIN_EQ){ $("eq2").value = MIN_EQ; render(); } else if(v > 100){ $("eq2").value = 100; render(); } });
+  $("hkm").addEventListener("change", ()=>{
+    $("hkLabel").textContent = $("hkm").value==="night" ? "$ per occupied night" : "% of purchase price";
+    $("hkv").step = $("hkm").value==="night" ? "1" : "0.1";
+    setSuggestions(); applySuggestions(["hkv"]); render();
+  });
+  document.querySelectorAll("[data-reset]").forEach(b=>b.addEventListener("click",()=>{
+    const k = b.dataset.reset;
+    if(k==="hk"){ $("hkm").value="pct"; $("hkm").dispatchEvent(new Event("change")); return; }
+    applySuggestions([k]); render();
+  }));
+  $("resetAll").addEventListener("click",()=>{
+    $("hkm").value="pct"; $("hkLabel").textContent="% of purchase price"; $("hkv").step="0.1";
+    setSuggestions(); applySuggestions(NUM); render();
+  });
+
+  fillPlans(); setSuggestions(); applySuggestions(NUM); render();
+
+  document.querySelectorAll(".srcbtn").forEach(b=>b.addEventListener("click",()=>{
+    const box = document.getElementById(b.getAttribute("aria-controls"));
+    const open = b.getAttribute("aria-expanded")==="true";
+    b.setAttribute("aria-expanded", String(!open)); box.hidden = open; b.textContent = open ? "Source" : "Hide";
+  }));
+  /* acknowledgment required on every visit; nothing is remembered */
+  const gate = $("gate"), app = $("app");
+  $("gateYes").addEventListener("click",()=>{ gate.hidden = true; app.inert = false; app.removeAttribute("aria-hidden"); });
+  $("gateNo").addEventListener("click",()=>{ $("gateMsg").hidden = false; });
+  try{ $("gateYes").focus(); }catch(_){}
+  $("reAck").addEventListener("click",()=>{ $("gateMsg").hidden = true; gate.hidden = false; app.inert = true; app.setAttribute("aria-hidden","true"); window.scrollTo(0,0); try{ $("gateYes").focus(); }catch(_){} });
+
+})();
+</script>
+
+</body>
+</html>
