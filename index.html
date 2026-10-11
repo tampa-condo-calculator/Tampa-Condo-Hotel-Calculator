@@ -15,16 +15,17 @@
   --bg:#f7f6f2; --surface:#ffffff; --ink:#15130f; --muted:#625c50; --line:#e4dfd3;
   --gold:#94752b; --gold-soft:#f3ecd9; --edit:#1d4f86; --edit-soft:#e9f0f9; --neg:#9a3324;
   --hl-bg:#1b1914; --hl-fg:#f4efe3; --hl-num:#e2bf6b; --hl-muted:#b8ae99; --hl-line:#3a352b;
+  --star-bg:#e9d9a8; --star-fg:#15130f;
   --display:"Cormorant Garamond", Georgia, "Times New Roman", serif;
   --body:"Jost", "Helvetica Neue", Arial, sans-serif;
   --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0f0e0c; --surface:#181612; --ink:#ece6d8; --muted:#a39b8a; --line:#2e2a22;
-  --gold:#d2ad5a; --gold-soft:#2a2416; --edit:#8db8ea; --edit-soft:#16212f; --neg:#e48a74; --hl-bg:#2a2416; --hl-fg:#f4efe3; --hl-num:#f0cf7e; --hl-muted:#b8ae99; --hl-line:#4a4130; color-scheme:dark}}
+  --gold:#d2ad5a; --gold-soft:#2a2416; --edit:#8db8ea; --edit-soft:#16212f; --neg:#e48a74; --hl-bg:#2a2416; --hl-fg:#f4efe3; --hl-num:#f0cf7e; --hl-muted:#b8ae99; --hl-line:#4a4130; --star-bg:#4a3c17; --star-fg:#f6dc98; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0f0e0c; --surface:#181612; --ink:#ece6d8; --muted:#a39b8a; --line:#2e2a22;
-  --gold:#d2ad5a; --gold-soft:#2a2416; --edit:#8db8ea; --edit-soft:#16212f; --neg:#e48a74; --hl-bg:#2a2416; --hl-fg:#f4efe3; --hl-num:#f0cf7e; --hl-muted:#b8ae99; --hl-line:#4a4130; color-scheme:dark}
+  --gold:#d2ad5a; --gold-soft:#2a2416; --edit:#8db8ea; --edit-soft:#16212f; --neg:#e48a74; --hl-bg:#2a2416; --hl-fg:#f4efe3; --hl-num:#f0cf7e; --hl-muted:#b8ae99; --hl-line:#4a4130; --star-bg:#4a3c17; --star-fg:#f6dc98; color-scheme:dark}
 
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.45}
 .wrap{max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:20px 40px;display:flex;flex-direction:column;gap:16px}
@@ -214,14 +215,18 @@ table.mini th small{display:block;font-weight:400;letter-spacing:0;text-transfor
   .fixed .srcbtn{grid-area:btn}
   .fixed .srcbox{grid-area:box}
   /* at a glance */
-  .hl{grid-template-columns:1fr 1fr}
-  .hl > div:nth-child(-n+2){grid-column:1 / -1}
-  .hl span{min-height:0}
-  .hl .pair b{font-size:1.5rem}
-  .hl > div:nth-child(n+3) b{font-size:1.35rem}
+  .hl{grid-template-columns:1fr!important}
+  .hl > div{padding:12px 14px;grid-column:1 / -1}
+  .hl span{min-height:0!important;margin-bottom:2px;letter-spacing:.05em;white-space:nowrap}
+  .hl .pair b,.hl > div > b{font-size:1.55rem!important}
+  .hl small{margin-top:2px}
   /* acknowledgment */
   .gate-btns button{flex:1 1 100%}
 }
+#t tr.star td,#t tr.star td:first-child{background:var(--gold-soft);font-weight:700}
+#t tr.star td[data-c]{font-size:.86rem}
+@media (max-width:600px){#t tr.star td[data-c]{font-size:.98rem}}
+@media (max-width:380px){.hl span{letter-spacing:.02em!important;font-size:.62rem!important}}
 /* highlights */
 .hl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--hl-line);border-radius:4px;overflow:hidden}
 @media (max-width:760px){.hl{grid-template-columns:repeat(2,minmax(0,1fr))}.hl .refi{grid-column:1 / -1}}
@@ -611,10 +616,10 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
     const tile = (a,b,c)=>`<div><span>${a}</span><b>${b}</b><small>${c}</small></div>`;
     const pair = (a,v1,v2,c)=>`<div><span>${a}</span><div class="pair"><p><b>${v1}</b><em>2030 · first year</em></p><p><b>${v2}</b><em>2032 · year 3</em></p></div><small>${c}</small></div>`;
         $("hl").innerHTML =
-      pair("Projected cash flow<br>Year 1 vs Year 3", usd(y1.cf), usd(y3.cf), "Before taxes, after projected expenses and mortgage") +
-      pair("Projected cash-on-cash<br>Year 1 vs Year 3", pct(y1.coc), pct(y3.coc), "On " + usd(y3.invest) + " invested") +
-      tile("Projected 2032 terminal value<br>minus initial investment", usd(gain), usd(y3.tv) + " terminal value less " + usd(y3.invest) + " invested") +
-      tile("Projected 2032<br>multiple of capital", y3.moic.toFixed(2) + "×", "At 2032, on " + usd(y3.invest) + " invested");
+      pair("Projected cash flow · Year 1 vs Year 3", usd(y1.cf), usd(y3.cf), "Before taxes, after projected expenses and mortgage") +
+      pair("Projected cash-on-cash · Year 1 vs Year 3", pct(y1.coc), pct(y3.coc), "On " + usd(y3.invest) + " invested") +
+      tile("Projected 2032 terminal value − investment", usd(gain), usd(y3.tv) + " terminal value less " + usd(y3.invest) + " invested") +
+      tile("Projected 2032 multiple of capital", y3.moic.toFixed(2) + "×", "At 2032, on " + usd(y3.invest) + " invested");
 
     const changed = NUM.filter(k=>val(k)!==Number(sugg[k])).length + ($("hkm").value!==sugg.hkm?1:0);
     $("youNote").innerHTML = changed ? `<span class="chip you">Your assumptions</span> ${changed} field${changed>1?"s":""} changed from the suggestion.` : `<span class="chip">Standard</span> Every field is at its suggested value.`;
@@ -648,13 +653,13 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
       row("Total investment amount <small>deposits, then equity at closing</small>", pre(o=>o.invest)) +
       row("Mortgage payment <small>30-year, principal &amp; interest</small>", o=>o.mort) +
       sec("Returns") +
-      row("Projected cash flow before taxes (a)", o=>o.cf, "key") +
+      row("Projected cash flow before taxes (a)", o=>o.cf, "star") +
       row("Projected principal repayment (b)", o=>o.prin) +
       row("Projected property appreciation (c) <small>2030 includes 2027–2029</small>", pre(o=>o.appreciation)) +
       row("Projected total annual return (a + b + c)", pre(o=>o.total), "tot") +
       row("Projected cumulative return", pre(o=>o.cum)) +
       row("Projected annual return on investment", pre(fmt(o=>o.retPct, v=>pct(v)))) +
-      row("Projected cash-on-cash return", fmt(o=>o.coc, v=>pct(v)), "key") +
+      row("Projected cash-on-cash return", fmt(o=>o.coc, v=>pct(v)), "star") +
       row(`Projected terminal value <small>at a ${val("cap")}% cap rate</small>`, o=>o.tv) +
       row("Projected multiple of invested capital <small>incl. cumulative cash flow</small>", fmt(o=>o.moic, v=>v.toFixed(2)+"×")) +
       `</tbody>`;
