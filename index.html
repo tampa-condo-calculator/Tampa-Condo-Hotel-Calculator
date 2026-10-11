@@ -405,7 +405,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
             <span id="hkLabel" hidden></span>
           </label>
           <div class="f fx"><span class="fl">Project deposit</span><output>40%</output><span class="note">Paid before top-off</span></div>
-          <label class="f ed" for="eq2"><span class="fl">Closing equity % (min 25)</span><input id="eq2" type="number" step="1" min="25" max="100"><span class="sug"><button type="button" data-reset="eq2">↺ <span data-s="eq2"></span></button></span></label>
+          <div class="f fx"><span class="fl">Closing equity</span><output>40%</output><span class="note">Loan 60% at closing</span><input id="eq2" type="hidden" value="40"></div>
           <label class="f ed" for="rate"><span class="fl">Mortgage rate %</span><input id="rate" type="number" step="0.05" min="0"><span class="sug"><button type="button" data-reset="rate">↺ <span data-s="rate"></span></button></span></label>
           <label class="f ed" for="hkv"><span class="fl" id="hkAmt">Housekeeping % of price</span><input id="hkv" type="number" step="0.1" min="0"><span class="sug"><button type="button" data-reset="hkv">↺ <span data-s="hkv"></span></button></span></label>
           <label class="f ed" for="appr"><span class="fl">Appreciation %</span><input id="appr" type="number" step="0.25"><span class="sug"><button type="button" data-reset="appr">↺ <span data-s="appr"></span></button></span></label>
@@ -452,10 +452,10 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
     <ul class="notes">
       <li>Room revenue = ADR × occupancy × 365 nights. The 2030 ADR is yours to set (HVS suggestion shown). Each later year grows 7% a year, the HVS study's annual rate, and is not editable. Suggested occupancy follows HVS Market Research (February 1, 2025), held at 75% in years 4–5.</li>
       <li>Unit list shows only available units (green on the inventory grid printed October 10, 2026), sorted by price. The suggested purchase price is that unit's list price; enter the actual contract price.</li>
-      <li>The project deposit is fixed at 40% of the purchase price before closing. At closing, equity is at least 25%, and the balance is financed over 30 years at the mortgage rate.</li>
+      <li>The project deposit is fixed at 40% of the purchase price before closing. At closing, equity stays at 40% and the 60% balance is financed over 30 years at the mortgage rate.</li>
       <li>Cash flow before taxes (a) = net operating income − mortgage payment. Total annual return adds principal paid down (b) and appreciation (c), measured against cash invested.</li>
-      <li>Terminal value = net operating income ÷ cap rate (7% suggested for a condo-hotel suite). Multiple of invested capital = (terminal value − remaining loan + cumulative cash flow) ÷ cash invested. Selling costs are not deducted.</li>
-      <li>Suggested growth figures: 4.0% appreciation reflects a flatter downtown Tampa condo market than the 2021–22 run-up, with new luxury product holding value better than resale. 3.0% inflation sits above the Fed's 2% target to allow for Florida insurance and labor costs. Closing equity has a 25% minimum; 100% means an all-cash purchase.</li>
+      <li>Terminal value = net operating income ÷ cap rate (8.5% suggested for a condo-hotel suite). Multiple of invested capital = (terminal value − remaining loan + cumulative cash flow) ÷ cash invested. Selling costs are not deducted.</li>
+      <li>Suggested growth figures: 4.0% appreciation reflects a flatter downtown Tampa condo market than the 2021–22 run-up, with new luxury product holding value better than resale. 3.0% inflation sits above the Fed's 2% target to allow for Florida insurance and labor costs.</li>
       <li>Not included: owner stays, income taxes, depreciation or cost segregation, resort fees, closing and selling costs.</li>
     </ul>
   </section>
@@ -495,7 +495,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
   const sugg = {};
   const ADR_G = 0.07; /* HVS annual rate growth */
   const NUM = ["price","adr1","occ1","occ2","occ3","occ4","hkv","eq2","rate","appr","cpi","cap"];
-  const DEPOSIT = 0.40, MIN_EQ = 25;
+  const DEPOSIT = 0.40, MIN_EQ = 40;
 
   const MONEY = ["price","adr1"];
   const val = k => Number(String($(k).value).replace(/[^0-9.\-]/g,"")) || 0;
@@ -508,7 +508,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
       price:planRow()[4], adr1:h[0], adr2:h[1], adr3:h[2], adrg:7,
       occ1:63, occ2:70, occ3:75, occ4:75, hkm:"pct",
       hkv: ($("hkm").value==="night") ? HK_NIGHT[S.type] : 2.5,
-      eq2:40, rate:6.85, appr:4, cpi:3, cap:7
+      eq2:40, rate:6.85, appr:4, cpi:3, cap:8.5
     });
   }
   function fmtSug(k){
@@ -653,7 +653,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
       row("Projected Net Operating Income", o=>o.noi, "tot") +
       sec("Projected Financing &amp; Value") +
       row("Projected Market Value", pre(o=>o.value)) +
-      row("Projected Total Investment <small>deposits, then equity at closing</small>", pre(o=>o.invest)) +
+      row("Projected Total Investment <small>40% deposit, then 40% equity at closing</small>", pre(o=>o.invest)) +
       row("Projected Annual Mortgage Payment <small>30-year, principal &amp; interest</small>", o=>o.mort) +
       sec("Projected Returns") +
       row("Projected Cash Flow Before Taxes (a)", o=>o.cf, "star") +
@@ -690,7 +690,19 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
     });
     $(k).addEventListener("blur", ()=>{ $(k).value = fmtPrice(val(k)); });
   });
-  $("eq2").addEventListener("blur", ()=>{ const v = val("eq2"); if(v < MIN_EQ){ $("eq2").value = MIN_EQ; render(); } else if(v > 100){ $("eq2").value = 100; render(); } });
+  // Input guards: blank/invalid restores the suggestion; out-of-range values are clamped.
+  const LIMITS = { price:[50000,50000000], adr1:[50,10000], occ1:[0,100], occ2:[0,100], occ3:[0,100], occ4:[0,100],
+    hkv:[0,1000], rate:[0,20], appr:[-10,20], cpi:[-5,20], cap:[3,15] };
+  Object.keys(LIMITS).forEach(k=>$(k).addEventListener("blur", ()=>{
+    const el = $(k), raw = String(el.value).replace(/[^0-9.\-]/g,""), n = Number(raw);
+    let lim = LIMITS[k];
+    if(k==="hkv") lim = $("hkm").value==="night" ? [0,1000] : [0,20];
+    let out;
+    if(raw==="" || !isFinite(n) || (MONEY.includes(k) && n < lim[0])) out = Number(sugg[k]);
+    else out = Math.min(lim[1], Math.max(lim[0], n));
+    if(out !== n || raw==="") el.value = MONEY.includes(k) ? fmtPrice(out) : out;
+    render();
+  }));
   $("hkm").addEventListener("change", ()=>{
     $("hkLabel").textContent = $("hkm").value==="night" ? "$ per occupied night" : "% of purchase price";
     $("hkv").step = $("hkm").value==="night" ? "1" : "0.1";
