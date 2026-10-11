@@ -228,7 +228,7 @@ table.mini th small{display:block;font-weight:400;letter-spacing:0;text-transfor
 #t tr.star td,#t tr.star td:first-child{background:var(--gold-soft);font-weight:700}
 #t tr.star td[data-c]{font-size:.86rem}
 @media (max-width:600px){#t tr.star td[data-c]{font-size:.98rem}}
-@media (max-width:380px){#t th:first-child{width:66%!important}#t td.lbl{font-size:.76rem!important}#t td[data-c]{font-size:.76rem!important}}
+@media (max-width:380px){#t th:first-child{width:66%!important}#t td.lbl{font-size:.73rem!important;letter-spacing:-.01em}#t td[data-c]{font-size:.76rem!important}}
 @media (max-width:380px){.hl span{letter-spacing:.02em!important;font-size:.62rem!important}}
 /* highlights */
 .hl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--hl-line);border-radius:4px;overflow:hidden}
@@ -305,7 +305,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
 
   <!-- UNIT -->
   <section class="panel unit" aria-labelledby="h-unit">
-    <h2 id="h-unit" class="unit-h">Potential purchased unit</h2>
+    <h2 id="h-unit" class="unit-h">Potential Purchased Unit</h2>
     <div class="unitgrid">
       <div class="f">
         <span>Unit type</span>
@@ -349,7 +349,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
     </div>
     <div class="panel">
       <div class="hvs-head">
-        <h2>Comparable suites nearby</h2>
+        <h2>Comparable Suites Nearby</h2>
         <p class="fine hvs-addr">Water Street luxury hotels<br>Published weekday rates<br>Aug 17–19, 2026 · off-peak</p>
       </div>
       <div class="mtbl">
@@ -415,7 +415,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
       </div>
 
       <aside class="panel fixed" aria-labelledby="h-fixed">
-        <h3 id="h-fixed">Standard suggestions · Tampa market</h3>
+        <h3 id="h-fixed">Standard Suggestions · Tampa Market</h3>
         <dl>
           <div><dt>Projected management fee</dt><dd>of room revenue</dd><span class="v">15%</span><button type="button" class="srcbtn" aria-expanded="false" aria-controls="src-mgmt">Source</button><p class="srcbox" id="src-mgmt" hidden><b>Source:</b> rental program offering terms. The owner keeps 85% of room revenue and the operator takes 15%, fixed for every year shown.</p></div>
           <div><dt>Projected HOA</dt><dd>$1.03 / sq ft / mo</dd><span class="v" id="fx-hoa"></span><button type="button" class="srcbtn" aria-expanded="false" aria-controls="src-hoa">Source</button><p class="srcbox" id="src-hoa" hidden><b>Source:</b> the project's published HOA structure, $1.03 per sq ft per month. Includes electric, water, internet, cable, trash, sewer, HOA insurance and HOA maintenance. Annual figure = $1.03 × sq ft × 12.</p></div>
@@ -430,7 +430,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
 
   <!-- HIGHLIGHTS -->
   <section aria-labelledby="h-hl" style="display:flex;flex-direction:column;gap:6px">
-    <h2 id="h-hl">At a glance <span class="chip">Projected</span></h2>
+    <h2 id="h-hl">At a Glance <span class="chip">Projected</span></h2>
     <div class="hl" id="hl" aria-live="polite"></div>
     <p class="hint" id="youNote"></p>
   </section>
@@ -438,7 +438,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
   <!-- TABLE -->
   <section aria-labelledby="h-t" style="display:flex;flex-direction:column;gap:6px">
     <div>
-      <h2 id="h-t">Projected growth &amp; income, 2026–2034</h2>
+      <h2 id="h-t">Projected Growth &amp; Income, 2026–2034</h2>
       <p class="hint">Signing in 2026, projected completion and closing late 2029, rental operations 2030–2034.</p>
       <p class="ack">Financial projections are speculative in nature and based upon subjective decisions and assumptions. Since the illustrative financial projections cover multiple years, such information by its nature becomes less meaningful and reliable with each successive year. Please review the assumptions above. Accordingly, there can be no assurance that the results reflected in the illustrative financial projections will be realized, and actual results may vary materially from those reflected in such illustrative financial projections. As a result, the illustrative financial projections should not be relied on as necessarily predictive of actual future events.</p>
     </div>
@@ -448,7 +448,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
 
   <!-- NOTES -->
   <section class="panel" aria-labelledby="h-basis">
-    <h2 id="h-basis">How the figures are built</h2>
+    <h2 id="h-basis">How the Figures Are Built</h2>
     <ul class="notes">
       <li>Room revenue = ADR × occupancy × 365 nights. The 2030 ADR is yours to set (HVS suggestion shown). Each later year grows 7% a year, the HVS study's annual rate, and is not editable. Suggested occupancy follows HVS Market Research (February 1, 2025), held at 75% in years 4–5.</li>
       <li>Unit list shows only available units (green on the inventory grid printed October 10, 2026), sorted by price. The suggested purchase price is that unit's list price; enter the actual contract price.</li>
@@ -622,7 +622,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
       pair("Projected cash flow · Year 1 vs Year 3", usd(y1.cf), usd(y3.cf), "Before taxes, after projected expenses and mortgage") +
       pair("Projected cash-on-cash · Year 1 vs Year 3", pct(y1.coc), pct(y3.coc), "On " + usd(y3.invest) + " invested") +
       tile("Projected 2032 terminal value − investment", usd(gain), usd(y3.tv) + " terminal value less " + usd(y3.invest) + " invested") +
-      tile("Projected 2032 multiple of capital", y3.moic.toFixed(2) + "×", "At 2032, on " + usd(y3.invest) + " invested");
+      tile("Projected 2032 multiple of capital", y3.moic.toFixed(2) + "× = " + Math.round(y3.moic*100).toLocaleString("en-US") + "%", "At 2032, on " + usd(y3.invest) + " invested");
 
     const changed = NUM.filter(k=>val(k)!==Number(sugg[k])).length + ($("hkm").value!==sugg.hkm?1:0);
     $("youNote").innerHTML = changed ? `<span class="chip you">Your assumptions</span> ${changed} field${changed>1?"s":""} changed from the suggestion.` : `<span class="chip">Standard</span> Every field is at its suggested value.`;
@@ -632,39 +632,39 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
     const pre = fn => (fn.pre=true, fn);
     const fmt = (fn,f) => (fn.f=f, fn);
     const sec = t => `<tr class="sec"><td class="secl">${t}</td>${D.map((o,i)=>`<td data-c="${i}"></td>`).join("")}</tr>`;
-    const hkLbl = $("hkm").value==="night" ? `Housekeeping <small>EST ${usd(val("hkv"))} per occupied night</small>` : `Housekeeping <small>EST ${$("hkv").value}% of purchase price</small>`;
+    const hkLbl = $("hkm").value==="night" ? `Projected Housekeeping <small>EST ${usd(val("hkv"))} per occupied night</small>` : `Projected Housekeeping <small>EST ${$("hkv").value}% of purchase price</small>`;
 
     if(S.col===undefined || S.col>=D.length) S.col = 1;
     $("ytabs").innerHTML = D.map((o,i)=>`<button type="button" data-col="${i}" aria-pressed="${i===S.col}">${o.y}<small>${o.y>=OPS0?"Yr "+(o.y-OPS0+1):"Signing"}</small></button>`).join("");
     $("t").innerHTML =
       `<thead><tr><th>Year</th>${D.map((o,i)=>`<th data-c="${i}">${o.y}<small>${o.y>=OPS0?"Year "+(o.y-OPS0+1):"Signing"}</small></th>`).join("")}</tr></thead><tbody>` +
-      sec("Revenue") +
-      row("Projected room rate (ADR)", o=>o.adr) +
-      row("Projected occupancy", fmt(o=>o.occ, v=>pct(v,0)), "sub") +
-      row("Projected room revenue", o=>o.rev, "key") +
-      sec("Projected expenses") +
-      row("Management Fee <small>15% of gross revenue</small>", o=>o.mgmt) +
-      row("HOA Fees <small>incl. elec, HOA insurance, water, cable, internet and maintenance</small>", o=>o.hoa) +
+      sec("Projected Revenue") +
+      row("Projected Room Rate (ADR)", o=>o.adr) +
+      row("Projected Occupancy", fmt(o=>o.occ, v=>pct(v,0)), "sub") +
+      row("Projected Annual Room Revenue", o=>o.rev, "key") +
+      sec("Projected Annual Expenses") +
+      row("Projected Management Fee <small>15% of gross revenue</small>", o=>o.mgmt) +
+      row("Projected HOA Fees <small>incl. elec, HOA insurance, water, cable, internet and maintenance</small>", o=>o.hoa) +
       row(hkLbl, o=>o.hk) +
-      row("Insurance <small>walls-in, liability policy @ $2.00 per sq ft</small>", o=>o.ins) +
-      row("Property Taxes <small>19.8428 mills</small>", o=>o.tax) +
-      row("Sinking Fund Provision <small>wear and tear, replacement of FF&amp;E @ 0.5% of purchase price</small>", o=>o.sink) +
-      row("Total projected expenses", o=>o.exp, "tot") +
-      row("Projected net operating income", o=>o.noi, "tot") +
-      sec("Financing &amp; value") +
-      row("Projected market value", pre(o=>o.value)) +
-      row("Total investment amount <small>deposits, then equity at closing</small>", pre(o=>o.invest)) +
-      row("Mortgage payment <small>30-year, principal &amp; interest</small>", o=>o.mort) +
-      sec("Returns") +
-      row("Projected cash flow before taxes (a)", o=>o.cf, "star") +
-      row("Projected principal repayment (b)", o=>o.prin) +
-      row("Projected property appreciation (c) <small>2030 includes 2027–2029</small>", pre(o=>o.appreciation)) +
-      row("Projected total annual return (a+b+c)", pre(o=>o.total), "tot") +
-      row("Projected cumulative return", pre(o=>o.cum)) +
-      row("Projected annual return on investment", pre(fmt(o=>o.retPct, v=>pct(v)))) +
-      row("Projected cash-on-cash return", fmt(o=>o.coc, v=>pct(v)), "star") +
-      row(`Projected terminal value <small>at a ${val("cap")}% cap rate</small>`, o=>o.tv) +
-      row("Projected multiple of invested capital <small>incl. cumulative cash flow</small>", fmt(o=>o.moic, v=>v.toFixed(2)+"×")) +
+      row("Projected Insurance <small>walls-in, liability policy @ $2.00 per sq ft</small>", o=>o.ins) +
+      row("Projected Property Taxes <small>19.8428 mills</small>", o=>o.tax) +
+      row("Projected Sinking Fund Provision <small>wear and tear, replacement of FF&amp;E @ 0.5% of purchase price</small>", o=>o.sink) +
+      row("Total Projected Annual Expenses", o=>o.exp, "tot") +
+      row("Projected Net Operating Income", o=>o.noi, "tot") +
+      sec("Projected Financing &amp; Value") +
+      row("Projected Market Value", pre(o=>o.value)) +
+      row("Projected Total Investment <small>deposits, then equity at closing</small>", pre(o=>o.invest)) +
+      row("Projected Annual Mortgage Payment <small>30-year, principal &amp; interest</small>", o=>o.mort) +
+      sec("Projected Returns") +
+      row("Projected Cash Flow Before Taxes (a)", o=>o.cf, "star") +
+      row("Projected Principal Repayment (b)", o=>o.prin) +
+      row("Projected Property Appreciation (c) <small>2030 includes 2027–2029</small>", pre(o=>o.appreciation)) +
+      row("Projected Total Annual Return (a+b+c)", pre(o=>o.total), "tot") +
+      row("Projected Cumulative Return", pre(o=>o.cum)) +
+      row("Projected Annual Return on Investment", pre(fmt(o=>o.retPct, v=>pct(v)))) +
+      row("Projected Cash-on-Cash Return", fmt(o=>o.coc, v=>pct(v)), "star") +
+      row(`Projected Terminal Value <small>at a ${val("cap")}% cap rate</small>`, o=>o.tv) +
+      row("Projected Multiple of Invested Capital <small>incl. cumulative cash flow</small>", fmt(o=>o.moic, v=>v.toFixed(2)+"×")) +
       `</tbody>`;
     $("t").dataset.col = S.col;
     paintSuggestions();
