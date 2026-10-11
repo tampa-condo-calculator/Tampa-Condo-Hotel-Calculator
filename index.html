@@ -454,7 +454,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
       <li>Unit list shows only available units (green on the inventory grid printed October 10, 2026), sorted by price. The suggested purchase price is that unit's list price; enter the actual contract price.</li>
       <li>The project deposit is fixed at 40% of the purchase price before closing. At closing, equity stays at 40% and the 60% balance is financed over 30 years at the mortgage rate.</li>
       <li>Cash flow before taxes (a) = net operating income − mortgage payment. Total annual return adds principal paid down (b) and appreciation (c), measured against cash invested.</li>
-      <li>Terminal value = net operating income ÷ cap rate (8.5% suggested for a condo-hotel suite). Multiple of invested capital = (terminal value − remaining loan + cumulative cash flow) ÷ cash invested. Selling costs are not deducted.</li>
+      <li>Terminal value = net operating income ÷ cap rate (8% suggested for a condo-hotel suite). Multiple of invested capital = (terminal value − remaining loan + cumulative cash flow) ÷ cash invested. Selling costs are not deducted.</li>
       <li>Suggested growth figures: 4.0% appreciation reflects a flatter downtown Tampa condo market than the 2021–22 run-up, with new luxury product holding value better than resale. 3.0% inflation sits above the Fed's 2% target to allow for Florida insurance and labor costs.</li>
       <li>Not included: owner stays, income taxes, depreciation or cost segregation, resort fees, closing and selling costs.</li>
     </ul>
@@ -508,7 +508,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
       price:planRow()[4], adr1:h[0], adr2:h[1], adr3:h[2], adrg:7,
       occ1:63, occ2:70, occ3:75, occ4:75, hkm:"pct",
       hkv: ($("hkm").value==="night") ? HK_NIGHT[S.type] : 2.5,
-      eq2:40, rate:6.85, appr:4, cpi:3, cap:8.5
+      eq2:40, rate:6.85, appr:4, cpi:3, cap:8
     });
   }
   function fmtSug(k){
