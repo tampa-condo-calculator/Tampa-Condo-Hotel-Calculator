@@ -168,6 +168,60 @@ table.mini th small{display:block;font-weight:400;letter-spacing:0;text-transfor
 .reack:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .avail{display:inline-flex;align-items:center;gap:4px;margin-left:6px;font-size:.66rem;color:var(--muted);font-weight:400}
 .avail i{width:7px;height:7px;border-radius:50%;background:#32cd32;display:inline-block}
+.gate-card{max-width:640px!important;max-height:calc(100dvh - 32px);overflow-y:auto}
+.gate-terms{margin:0;padding-left:20px;display:grid;gap:6px;font-size:.8rem;line-height:1.5}
+.gate-terms b{font-weight:600}
+.gate-check{display:flex;gap:8px;align-items:flex-start;font-size:.84rem;font-weight:600;cursor:pointer;padding:8px 10px;background:var(--gold-soft);border-radius:4px}
+.gate-check input{width:16px;height:16px;min-width:16px;padding:0;margin:2px 0 0;border:0;background:none;box-shadow:none;accent-color:var(--gold);flex:none}
+.gate-check span{flex:1;min-width:0;color:var(--ink);line-height:1.4}
+.gate-yes:disabled{opacity:.4;cursor:not-allowed}
+
+/* ---------- phone layout ---------- */
+.ytabs{display:none}
+.secl{text-align:left}
+@media (max-width:600px){
+  .ytabs{display:flex;gap:4px;overflow-x:auto;padding-bottom:2px;position:sticky;top:env(safe-area-inset-top,0px);z-index:3;background:var(--bg);padding-block:6px}
+  .ytabs button{flex:1 0 auto;font:inherit;font-size:.82rem;font-weight:600;cursor:pointer;padding:6px 8px;border:1px solid var(--line);border-radius:4px;background:var(--surface);color:var(--ink);display:flex;flex-direction:column;align-items:center;line-height:1.15;min-width:54px}
+  .ytabs button small{font-size:.6rem;font-weight:500;color:var(--muted)}
+  .ytabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .ytabs button[aria-pressed="true"] small{color:var(--bg)}
+  #t{min-width:0!important;table-layout:fixed;width:100%}
+  #t th:first-child{width:62%}
+  #t td,#t th,#t .lbl small{white-space:normal;overflow-wrap:anywhere}
+  #t td[data-c],#t th[data-c]{white-space:nowrap}
+  #t [data-c]{display:none}
+  #t[data-col="0"] [data-c="0"],#t[data-col="1"] [data-c="1"],#t[data-col="2"] [data-c="2"],#t[data-col="3"] [data-c="3"],#t[data-col="4"] [data-c="4"],#t[data-col="5"] [data-c="5"]{display:table-cell}
+  #t td,#t th{font-size:.84rem;padding:6px 8px}
+  #t td:first-child,#t th:first-child{position:static;min-width:0;white-space:normal}
+  #t .lbl small{display:block;margin:1px 0 0;font-size:.68rem}
+  #t td[data-c]{vertical-align:top;padding-top:7px}
+  .tbl{overflow-x:visible}
+  /* unit section */
+  .unitgrid{grid-template-columns:1fr}
+  .unitgrid > *{grid-column:1 / -1}
+  .types{width:100%}
+  .types button{flex:1}
+  .facts{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;white-space:normal}
+  /* comparables */
+  table.comps th:nth-child(4),table.comps td:nth-child(4){display:none}
+  table.comps th,table.comps td{font-size:.74rem;padding:4px 4px}
+  table.comps th:last-child{white-space:nowrap}
+  /* standard suggestions */
+  .fixed dl div{display:grid;grid-template-columns:minmax(0,1fr) auto auto;grid-template-areas:"dt v btn" "dd dd dd" "box box box";column-gap:8px;row-gap:1px;align-items:baseline}
+  .fixed dt{grid-area:dt;white-space:normal}
+  .fixed dd{grid-area:dd}
+  .fixed .v{grid-area:v;margin-left:0}
+  .fixed .srcbtn{grid-area:btn}
+  .fixed .srcbox{grid-area:box}
+  /* at a glance */
+  .hl{grid-template-columns:1fr 1fr}
+  .hl > div:nth-child(-n+2){grid-column:1 / -1}
+  .hl span{min-height:0}
+  .hl .pair b{font-size:1.5rem}
+  .hl > div:nth-child(n+3) b{font-size:1.35rem}
+  /* acknowledgment */
+  .gate-btns button{flex:1 1 100%}
+}
 /* highlights */
 .hl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--hl-line);border-radius:4px;overflow:hidden}
 @media (max-width:760px){.hl{grid-template-columns:repeat(2,minmax(0,1fr))}.hl .refi{grid-column:1 / -1}}
@@ -189,10 +243,11 @@ table.mini th small{display:block;font-weight:400;letter-spacing:0;text-transfor
 
 /* table */
 .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:4px;background:var(--surface)}
-table{border-collapse:collapse;width:100%;min-width:760px;font-variant-numeric:tabular-nums}
-th,td{padding:4px 7px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line);font-size:.78rem}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+#t{min-width:600px}
+th,td{padding:4px 6px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line);font-size:clamp(.7rem,1.05vw,.78rem)}
 td{font-family:var(--mono)}
-th:first-child,td:first-child{text-align:left;font-family:var(--body);position:sticky;left:0;background:var(--surface);white-space:nowrap;min-width:240px;z-index:1}
+th:first-child,td:first-child{text-align:left;font-family:var(--body);position:sticky;left:0;background:var(--surface);white-space:normal;min-width:170px;z-index:1}
 thead th{font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
 thead th small{display:block;font-weight:400;letter-spacing:0;text-transform:none;color:var(--gold)}
 tr.sec td{font-family:var(--display);font-size:.9rem;font-weight:600;color:var(--gold);padding-top:8px;border-bottom:1px solid var(--gold)}
@@ -216,14 +271,15 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
 <div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-h" aria-describedby="gate-t">
   <div class="gate-card">
     <div class="eyebrow">Required before use</div>
-    <h2 id="gate-h">Acknowledgment</h2>
-    <p id="gate-t">This calculator is for illustration and education only. Any figure changed from a suggestion is the user's own assumption. Results are not a forecast, guarantee or representation of any developer, seller, broker or hotel operator, and nothing here is tax, legal, financing or investment advice. Consult your own advisors before purchasing.</p>
-    <p class="gate-q">Do you acknowledge and agree?</p>
+    <h2 id="gate-h">Acknowledgment, Disclaimer and Release</h2>
+    <p>Read these terms carefully. You must accept them each time you use this calculator.</p>
+    <ol class="gate-terms" id="gate-t"><li><b>Illustration only.</b> This calculator shows hypothetical results based on assumptions. It is not an offer, appraisal, forecast or guarantee of income, occupancy, value or return. Suggested figures may be incomplete or out of date, and any figure you change is your own assumption. Actual results may differ.</li><li><b>No representation.</b> Nothing here is a representation, warranty or offer by ARC Realty Group, Hotel ORA + Private Residences, ARC Tampa Development LLC, the hotel operator, or their affiliates, brokers and agents (the &ldquo;Released Parties&rdquo;). Third-party data, prices and availability are shown as is and may change without notice.</li><li><b>Rental, advice and release.</b> Rental is subject to the condominium documents, any rental program and market conditions, and no one guarantees a unit will rent or earn income. This is not legal, tax, financing or investment advice; consult your own advisors. To the fullest extent permitted by law, you release the Released Parties from any claim arising from your use of, or reliance on, this calculator.</li></ol>
+    <label class="gate-check" for="gateChk"><input type="checkbox" id="gateChk"><span>I have read, understand and agree to the Acknowledgment, Disclaimer and Release above.</span></label>
     <div class="gate-btns">
-      <button type="button" id="gateYes" class="gate-yes">I acknowledge</button>
-      <button type="button" id="gateNo" class="gate-no">I do not acknowledge</button>
+      <button type="button" id="gateYes" class="gate-yes" disabled>I acknowledge and agree</button>
+      <button type="button" id="gateNo" class="gate-no">I do not agree</button>
     </div>
-    <p class="gate-msg" id="gateMsg" role="alert" hidden>You must acknowledge this statement to use the calculator.</p>
+    <p class="gate-msg" id="gateMsg" role="alert" hidden>You must accept these terms to use this calculator. If you do not agree, close this page.</p>
   </div>
 </div>
 
@@ -232,8 +288,8 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
     <div>
       <div class="eyebrow">Condo-hotel investment · Downtown Tampa</div>
       <h1>Five-Year Projected Growth &amp; Income</h1>
-      <p class="ack">This calculator is for illustration and education only. Any figure changed from a suggestion is the user's own assumption. Results are not a forecast, guarantee or representation of any developer, seller, broker or hotel operator, and nothing here is tax, legal, financing or investment advice. Consult your own advisors before purchasing.</p>
-      <button type="button" class="reack" id="reAck">Show acknowledgment again</button>
+      <p class="ack">Hypothetical illustration only, based on assumptions. Not an offer, forecast or guarantee of income, value or return, and not legal, tax or investment advice. Nothing here is a representation by ARC Realty Group, Hotel ORA + Private Residences, ARC Tampa Development LLC, the hotel operator, and each of their affiliates, owners, officers, employees, brokers, sales associates and agents. Rental income is not guaranteed. Use is subject to the Acknowledgment, Disclaimer and Release.</p>
+      <button type="button" class="reack" id="reAck">View the full Acknowledgment, Disclaimer and Release</button>
       <p class="lead">Every blue field starts at a suggested figure and is yours to change. Gold figures are standard suggestions for the Tampa market.</p>
     </div>
     <hr class="rule">
@@ -270,7 +326,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
         <h2>HVS Market Research</h2>
         <p class="fine hvs-addr">HVS Consulting &amp; Valuation Division<br>of CHR Consulting, Inc.<br>4120 10th Avenue North<br>St. Petersburg, Florida 33713</p>
       </div>
-      <p class="hint nw one">Outside feasibility study · projected average daily rates for Hotel ORA + Private Residences</p>
+      <p class="hint nw">Independent feasibility study prepared specifically for <span style="white-space:nowrap">Hotel ORA + Private Residences</span>. Projected rates and occupancy apply to this property only and are shown for reference; use at your own discretion.</p>
       <div class="mtbl">
         <table class="mini hvs">
           <thead><tr><th>Room type</th><th>2030<small>63% occ.</small></th><th>2031<small>70% occ.</small></th><th>2032<small>75% occ.</small></th></tr></thead>
@@ -281,7 +337,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
           </tbody>
         </table>
       </div>
-      <p class="fine">HVS Consulting &amp; Valuation Division of CHR Consulting, Inc., report prepared February 1, 2025. HVS used the extraordinary assumption that average rates rise 7.0% a year, in line with the competitive group's compounded growth from 2016 to 2023, except 2030, which assumes no growth while new supply enters the market. Projections are estimates, not guarantees; actual results may vary materially.</p>
+      <p class="fine">HVS Consulting &amp; Valuation Division of CHR Consulting, Inc., report dated February 1, 2025. HVS used the extraordinary assumption that average rates rise 7.0% a year, in line with the competitive group's compounded growth from 2016 to 2023, except 2030, which assumes no growth while new supply enters the market. Figures are reproduced as published; HVS has not reviewed or approved this calculator. Market studies are estimates, not guarantees, and actual results may vary materially.</p>
     </div>
     <div class="panel">
       <div class="hvs-head">
@@ -289,7 +345,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
         <p class="fine hvs-addr">Water Street luxury hotels<br>Published weekday rates<br>Aug 17–19, 2026 · off-peak</p>
       </div>
       <div class="mtbl">
-        <table class="mini">
+        <table class="mini comps">
           <thead><tr><th>Hotel</th><th>Suite</th><th>View</th><th>Sleeps</th><th>Per night</th></tr></thead>
           <tbody>
             <tr><td>JW Marriott</td><td>2 Bed</td><td>City</td><td>6</td><td><b>$1,482</b></td></tr>
@@ -300,7 +356,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
         </table>
       </div>
       <div class="band" id="compBand"></div>
-      <p class="fine" style="text-align:center">Source: rates listed on the JW Marriott Tampa Water Street and Tampa EDITION websites. Hotel rates change daily.</p>
+      <p class="fine" style="text-align:center">Source: rates listed on the JW Marriott Tampa Water Street and Tampa EDITION websites for the dates shown. A single sample of published rates; these hotels differ in brand, size, services and location, and their rates are not an indication of the rate any unit will achieve. Hotel rates change daily.</p>
     </div>
   </section>
 
@@ -325,7 +381,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
           <label class="ed mc" for="adr1"><input id="adr1" type="text" inputmode="numeric" autocomplete="off" aria-label="2030 room rate"><span class="sug"><button type="button" data-reset="adr1">↺ <span data-s="adr1"></span></button></span></label>
           <div class="fx mc"><output id="adr2"></output></div>
           <div class="fx mc"><output id="adr3"></output></div>
-          <div class="fx mc"><output>+7% / yr</output></div>
+          <div class="fx mc"><output>+7%/yr</output></div>
           <div class="mx-l">Occupancy</div>
           <label class="ed mc" for="occ1"><span class="sfx"><input id="occ1" type="number" step="1" min="0" max="100" aria-label="2030 occupancy"><i aria-hidden="true">%</i></span><span class="sug"><button type="button" data-reset="occ1">↺ <span data-s="occ1"></span></button></span></label>
           <label class="ed mc" for="occ2"><span class="sfx"><input id="occ2" type="number" step="1" min="0" max="100" aria-label="2031 occupancy"><i aria-hidden="true">%</i></span><span class="sug"><button type="button" data-reset="occ2">↺ <span data-s="occ2"></span></button></span></label>
@@ -336,7 +392,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
 
         <div class="fields">
           <label class="f ed" for="hkm"><span class="fl">Housekeeping method</span>
-            <select id="hkm"><option value="pct">% of purchase price</option><option value="night">$ per occupied night</option></select>
+            <select id="hkm"><option value="pct">% of price</option><option value="night">$ per night</option></select>
             <span class="sug"><button type="button" data-reset="hk">↺ Suggested % of price</button></span>
             <span id="hkLabel" hidden></span>
           </label>
@@ -378,6 +434,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
       <p class="hint">Signing in 2026, projected completion and closing late 2029, rental operations 2030–2034.</p>
       <p class="ack">Financial projections are speculative in nature and based upon subjective decisions and assumptions. Since the illustrative financial projections cover multiple years, such information by its nature becomes less meaningful and reliable with each successive year. Please review the assumptions above. Accordingly, there can be no assurance that the results reflected in the illustrative financial projections will be realized, and actual results may vary materially from those reflected in such illustrative financial projections. As a result, the illustrative financial projections should not be relied on as necessarily predictive of actual future events.</p>
     </div>
+    <div class="ytabs" id="ytabs" role="group" aria-label="Choose a year"></div>
     <div class="tbl"><table id="t"></table></div>
   </section>
 
@@ -402,6 +459,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
     <div class="disc">
       <p class="caps">Oral representations cannot be relied upon as correctly stating representations of the developer. For correct representations, make reference to the documents required by Section 718.503, Florida Statutes, to be furnished by a developer to a buyer or lessee.</p>
       <p>All dimensions, specifications, prices and features are approximations and subject to availability and to change without notice. Stated dimensions may vary from the dimensions of the actual living space. All offers are subject to the terms and conditions of any sales or reservation agreement with the developer. Not an offer for or solicitation where prior registration is required or otherwise prohibited by these statutes. Equal Housing Opportunity.</p>
+      <p>Unit availability, list prices and specifications reflect the inventory dated October 10, 2026 and are subject to change, prior sale and withdrawal without notice. Inclusion of a unit is not an offer to sell that unit. Any purchase is governed solely by the purchase agreement and condominium documents.</p>
     </div>
   </section>
 </div>
@@ -562,14 +620,16 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
     $("youNote").innerHTML = changed ? `<span class="chip you">Your assumptions</span> ${changed} field${changed>1?"s":""} changed from the suggestion.` : `<span class="chip">Standard</span> Every field is at its suggested value.`;
 
     const cell = (o,fn) => { if(o.y<OPS0 && !fn.pre) return `<td class="na">—</td>`; const v = fn(o); return `<td class="${(typeof v==="number"&&v<0)?"neg":""}">${fn.f?fn.f(v):usd(v)}</td>`; };
-    const row = (label, fn, cls="") => `<tr class="${cls}"><td class="lbl">${label}</td>${D.map(o=>cell(o,fn)).join("")}</tr>`;
+    const row = (label, fn, cls="") => `<tr class="${cls}"><td class="lbl">${label}</td>${D.map((o,i)=>cell(o,fn).replace("<td",`<td data-c="${i}"`)).join("")}</tr>`;
     const pre = fn => (fn.pre=true, fn);
     const fmt = (fn,f) => (fn.f=f, fn);
-    const sec = t => `<tr class="sec"><td>${t}</td>${D.map(()=>"<td></td>").join("")}</tr>`;
+    const sec = t => `<tr class="sec"><td class="secl">${t}</td>${D.map((o,i)=>`<td data-c="${i}"></td>`).join("")}</tr>`;
     const hkLbl = $("hkm").value==="night" ? `Housekeeping <small>EST ${usd(val("hkv"))} per occupied night</small>` : `Housekeeping <small>EST ${$("hkv").value}% of purchase price</small>`;
 
+    if(S.col===undefined || S.col>=D.length) S.col = 1;
+    $("ytabs").innerHTML = D.map((o,i)=>`<button type="button" data-col="${i}" aria-pressed="${i===S.col}">${o.y}<small>${o.y>=OPS0?"Yr "+(o.y-OPS0+1):"Signing"}</small></button>`).join("");
     $("t").innerHTML =
-      `<thead><tr><th>Year</th>${D.map(o=>`<th>${o.y}<small>${o.y>=OPS0?"Year "+(o.y-OPS0+1):"Signing"}</small></th>`).join("")}</tr></thead><tbody>` +
+      `<thead><tr><th>Year</th>${D.map((o,i)=>`<th data-c="${i}">${o.y}<small>${o.y>=OPS0?"Year "+(o.y-OPS0+1):"Signing"}</small></th>`).join("")}</tr></thead><tbody>` +
       sec("Revenue") +
       row("Projected room rate (ADR)", o=>o.adr) +
       row("Projected occupancy", fmt(o=>o.occ, v=>pct(v,0)), "sub") +
@@ -598,6 +658,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
       row(`Projected terminal value <small>at a ${val("cap")}% cap rate</small>`, o=>o.tv) +
       row("Projected multiple of invested capital <small>incl. cumulative cash flow</small>", fmt(o=>o.moic, v=>v.toFixed(2)+"×")) +
       `</tbody>`;
+    $("t").dataset.col = S.col;
     paintSuggestions();
   }
 
@@ -644,12 +705,14 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
     const open = b.getAttribute("aria-expanded")==="true";
     b.setAttribute("aria-expanded", String(!open)); box.hidden = open; b.textContent = open ? "Source" : "Hide";
   }));
+  $("ytabs").addEventListener("click", e=>{ const b=e.target.closest("button[data-col]"); if(!b) return; S.col=Number(b.dataset.col); $("t").dataset.col=S.col; document.querySelectorAll("#ytabs button").forEach(x=>x.setAttribute("aria-pressed", x===b)); });
   /* acknowledgment required on every visit; nothing is remembered */
   const gate = $("gate"), app = $("app");
+  $("gateChk").addEventListener("change",()=>{ $("gateYes").disabled = !$("gateChk").checked; if($("gateChk").checked) $("gateMsg").hidden = true; });
   $("gateYes").addEventListener("click",()=>{ gate.hidden = true; app.inert = false; app.removeAttribute("aria-hidden"); });
   $("gateNo").addEventListener("click",()=>{ $("gateMsg").hidden = false; });
-  try{ $("gateYes").focus(); }catch(_){}
-  $("reAck").addEventListener("click",()=>{ $("gateMsg").hidden = true; gate.hidden = false; app.inert = true; app.setAttribute("aria-hidden","true"); window.scrollTo(0,0); try{ $("gateYes").focus(); }catch(_){} });
+  try{ $("gateChk").focus(); }catch(_){}
+  $("reAck").addEventListener("click",()=>{ $("gateMsg").hidden = true; $("gateChk").checked = false; $("gateYes").disabled = true; gate.hidden = false; app.inert = true; app.setAttribute("aria-hidden","true"); window.scrollTo(0,0); try{ $("gateChk").focus(); }catch(_){} });
 
 })();
 </script>
