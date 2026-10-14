@@ -618,7 +618,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
         $("hl").innerHTML =
       pair("Projected cash flow · Year 1 vs Year 3", usd(y1.cf), usd(y3.cf), cash ? "Before taxes, after projected expenses; no mortgage" : "Before taxes, after projected expenses and mortgage") +
       pair("Projected cash-on-cash · Year 1 vs Year 3", pct(y1.coc), pct(y3.coc), "On " + usd(y3.invest) + " invested") +
-      tile("Projected Property Value Above Initial Cash Investment", usd(gain), "Before outstanding mortgage debt; not net profit. 2032: " + usd(y3.tv) + " terminal value less " + usd(y3.invest) + " invested", true) +
+      tile("Projected 2032 Terminal Value", usd(y3.tv), "Net operating income ÷ " + val("cap") + "% cap rate") +
       tile("Projected 2032 multiple of capital", y3.moic.toFixed(2) + "× = " + Math.round(y3.moic*100).toLocaleString("en-US") + "%", "At 2032, on " + usd(y3.invest) + " invested");
 
     const changed = NUM.filter(k=>val(k)!==Number(sugg[k])).length + ($("hkm").value!==sugg.hkm?1:0);
