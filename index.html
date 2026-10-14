@@ -1,11 +1,4 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
-</head>
-<body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Condo-Hotel Pro Forma</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -56,13 +49,13 @@ input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid 
 /* unit picker */
 .unit{padding:10px 14px}
 .unit-h{font-family:var(--body);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:6px}
-.unitgrid{display:grid;grid-template-columns:auto minmax(260px,340px) 140px minmax(0,1fr);gap:12px;align-items:start}
+.unitgrid{display:grid;grid-template-columns:auto minmax(260px,400px) 180px minmax(0,1fr);gap:12px 16px;align-items:start}
 @media (max-width:760px){.unitgrid{grid-template-columns:1fr 1fr}.unitgrid .f:first-child,.facts{grid-column:1 / -1}}
 .types{display:inline-flex;border:1px solid var(--line);border-radius:3px;overflow:hidden;width:max-content}
 .types button{font:inherit;font-size:.8rem;font-weight:500;cursor:pointer;padding:4px 10px;border:0;border-right:1px solid var(--line);background:var(--surface);color:var(--ink)}
 .types button:last-child{border-right:0}
 .types button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
-.facts{margin:0;display:flex;flex-wrap:nowrap;justify-content:flex-end;gap:12px;padding-left:12px;border-left:1px solid var(--line);white-space:nowrap}
+.facts{margin:0;grid-column:1 / -1;display:flex;flex-wrap:wrap;justify-content:flex-start;gap:6px 28px;padding:8px 0 0;border-top:1px solid var(--line);white-space:nowrap;min-width:0}
 @media (max-width:900px){.facts{flex-wrap:wrap;gap:6px 14px}}
 @media (max-width:760px){.facts{justify-content:flex-start;padding:8px 0 0;border-left:0;border-top:1px solid var(--line)}}
 .facts div{display:flex;flex-direction:column}
@@ -165,6 +158,8 @@ table.mini th small{display:block;font-weight:400;letter-spacing:0;text-transfor
 .srcbtn[aria-expanded="true"]{color:var(--gold);border-color:var(--gold)}
 .srcbox{flex-basis:100%;margin:4px 0 0;padding:6px 8px;font-size:.7rem;line-height:1.45;color:var(--ink);background:var(--gold-soft);border-left:2px solid var(--gold)}
 .srcbox a{color:var(--edit)}
+.hkline{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.hl span.wl{white-space:normal!important}
 .reack{all:unset;cursor:pointer;align-self:flex-start;margin-top:4px;font-size:.7rem;font-weight:600;color:var(--edit);border-bottom:1px dotted var(--edit)}
 .reack:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .avail{display:inline-flex;align-items:center;gap:4px;margin-left:6px;font-size:.66rem;color:var(--muted);font-weight:400}
@@ -405,13 +400,15 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
             <span id="hkLabel" hidden></span>
           </label>
           <div class="f fx"><span class="fl">Project deposit</span><output>40%</output><span class="note">Paid before top-off</span></div>
-          <div class="f fx"><span class="fl">Closing equity</span><output>40%</output><span class="note">Loan 60% at closing</span><input id="eq2" type="hidden" value="40"></div>
+          <label class="f ed" for="eq2"><span class="fl">Down payment</span><select id="eq2"><option value="40">40% · financed</option><option value="100">100% · cash</option></select><span class="sug"><button type="button" data-reset="eq2">↺ <span data-s="eq2"></span></button></span></label>
           <label class="f ed" for="rate"><span class="fl">Mortgage rate %</span><input id="rate" type="number" step="0.05" min="0"><span class="sug"><button type="button" data-reset="rate">↺ <span data-s="rate"></span></button></span></label>
           <label class="f ed" for="hkv"><span class="fl" id="hkAmt">Housekeeping % of price</span><input id="hkv" type="number" step="0.1" min="0"><span class="sug"><button type="button" data-reset="hkv">↺ <span data-s="hkv"></span></button></span></label>
           <label class="f ed" for="appr"><span class="fl">Appreciation %</span><input id="appr" type="number" step="0.25"><span class="sug"><button type="button" data-reset="appr">↺ <span data-s="appr"></span></button></span></label>
           <label class="f ed" for="cpi"><span class="fl">Inflation %</span><input id="cpi" type="number" step="0.05"><span class="sug"><button type="button" data-reset="cpi">↺ <span data-s="cpi"></span></button></span></label>
           <label class="f ed" for="cap"><span class="fl">Terminal cap rate %</span><input id="cap" type="number" step="0.25" min="1"><span class="sug"><button type="button" data-reset="cap">↺ <span data-s="cap"></span></button></span></label>
         </div>
+        <p class="hint hkline">Projected housekeeping suggestion <button type="button" class="srcbtn" aria-expanded="false" aria-controls="src-hk">Source</button></p>
+        <p class="srcbox" id="src-hk" hidden><b>Estimate, not a quote.</b> The suggested 2.5% of purchase price is a conservative allowance. The operator's estimate is $145 per turnover (varies by room type) plus $20 per occupied night. At 63% occupancy (HVS), a suite is occupied about 229.95 nights a year. A 3-night average stay gives about 77 turnovers, about $15,713 a year; a 2-night average gives about 115 turnovers, about $21,270 a year. On a $1,091,675 two-bedroom, 2.5% is about $27,292, roughly $6,022 above the 2-night estimate, which lowers projected owner profit by that amount. <b>Stay-length benchmarks:</b> SiteMinder's U.S. summer 2026 booking sample, 2.22 nights (reported by Hotel Management); Cloudbeds' international independent-hotel benchmark, 2.6 nights; Pinellas County January hotel samples, 2.5 days (2024), 2.8 (2025) and 2.3 (2026). These support testing 2–3-night stays; they do not establish this property's actual average.</p>
       </div>
 
       <aside class="panel fixed" aria-labelledby="h-fixed">
@@ -452,7 +449,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
     <ul class="notes">
       <li>Room revenue = ADR × occupancy × 365 nights. The 2030 ADR is yours to set (HVS suggestion shown). Each later year grows 7% a year, the HVS study's annual rate, and is not editable. Suggested occupancy follows HVS Market Research (February 1, 2025), held at 75% in years 4–5.</li>
       <li>Unit list shows only available units (green on the inventory grid printed October 10, 2026), sorted by price. The suggested purchase price is that unit's list price; enter the actual contract price.</li>
-      <li>The project deposit is fixed at 40% of the purchase price before closing. At closing, equity stays at 40% and the 60% balance is financed over 30 years at the mortgage rate.</li>
+      <li id="finNote"></li>
       <li>Cash flow before taxes (a) = net operating income − mortgage payment. Total annual return adds principal paid down (b) and appreciation (c), measured against cash invested.</li>
       <li>Terminal value = net operating income ÷ cap rate (8% suggested for a condo-hotel suite). Multiple of invested capital = (terminal value − remaining loan + cumulative cash flow) ÷ cash invested. Selling costs are not deducted.</li>
       <li>Suggested growth figures: 4.0% appreciation reflects a flatter downtown Tampa condo market than the 2021–22 run-up, with new luxury product holding value better than resale. 3.0% inflation sits above the Fed's 2% target to allow for Florida insurance and labor costs.</li>
@@ -536,7 +533,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
 
   function fillPlans(){
     const list = byType(S.type).slice().sort((a,b)=>a[4]-b[4]);
-    $("plan").innerHTML = list.map(u=>`<option value="${u[0]}">${u[0]} · ${u[2]} · ${u[3].toLocaleString()} sq ft · ${u[5]} · $${u[4].toLocaleString()}</option>`).join("");
+    $("plan").innerHTML = list.map(u=>`<option value="${u[0]}">${u[0]} · ${u[2]} · ${u[3].toLocaleString()} sq ft · ${u[5]}</option>`).join("");
     $("plan").value = S.unit;
   }
 
@@ -593,13 +590,13 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
 
   function render(){
     const M = model(), R = M.rows, ops = R.filter(o=>o.y>=OPS0);
-    /* table shows 2026 (signing) then 2030–2034; 2027–2029 appreciation is carried into the 2030 column */
-    const D = R.filter(o=>o.y===YEARS[0] || o.y>=OPS0).map(o=>{
-      if(o.y!==OPS0) return o;
-      const app = R.filter(x=>x.y>YEARS[0] && x.y<=OPS0).reduce((s,x)=>s+x.appreciation,0);
-      const total = o.cf + o.prin + app;
-      return Object.assign({}, o, {appreciation:app, total, retPct: o.invest>0 ? total/o.invest : 0});
-    });
+        /* 2030 annual return counts only 2030 cash flow, principal and appreciation; 2027–2029 appreciation stays in the cumulative return */
+    const D = R.filter(o=>o.y===YEARS[0] || o.y>=OPS0);
+    const cash = val("eq2")>=100;
+    $("rate").disabled = cash;
+    $("finNote").textContent = cash
+      ? "The project deposit is fixed at 40% of the purchase price before closing. With 100% down, the remaining 60% is paid in cash at closing, so there is no mortgage payment or principal repayment, and the investment is the full purchase price."
+      : "The project deposit is fixed at 40% of the purchase price before closing. With 40% down, equity stays at 40% at closing and the 60% balance is financed over 30 years at the mortgage rate. Default mortgage terms reflect prior projects and current rate assumptions, not a financing offer; adjust them to your own expectations.";
     $("hkAmt").textContent = $("hkm").value==="night" ? "Housekeeping $ per night" : "Housekeeping % of price";
     $("facts").innerHTML = [["Price / sq ft",usd(M.P/M.sq)],["HOA / month",usd(M.yr1.hoa/12)],["Projected equity at closing",usd(M.P-M.loan)],["Projected loan at closing",usd(M.loan)]]
       .map(([a,b])=>`<div><dt>${a}</dt><dd>${b}</dd></div>`).join("");
@@ -616,12 +613,12 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
     const avgCoc = ops.reduce((s,o)=>s+o.coc,0)/ops.length;
     const y3 = ops.find(o=>o.y===2032);
     const gain = y3.tv - y3.invest;
-    const tile = (a,b,c)=>`<div><span>${a}</span><b>${b}</b><small>${c}</small></div>`;
+    const tile = (a,b,c,w)=>`<div><span${w?' class="wl"':""}>${a}</span><b>${b}</b><small>${c}</small></div>`;
     const pair = (a,v1,v2,c)=>`<div><span>${a}</span><div class="pair"><p><b>${v1}</b><em>2030 · first year</em></p><p><b>${v2}</b><em>2032 · year 3</em></p></div><small>${c}</small></div>`;
         $("hl").innerHTML =
-      pair("Projected cash flow · Year 1 vs Year 3", usd(y1.cf), usd(y3.cf), "Before taxes, after projected expenses and mortgage") +
+      pair("Projected cash flow · Year 1 vs Year 3", usd(y1.cf), usd(y3.cf), cash ? "Before taxes, after projected expenses; no mortgage" : "Before taxes, after projected expenses and mortgage") +
       pair("Projected cash-on-cash · Year 1 vs Year 3", pct(y1.coc), pct(y3.coc), "On " + usd(y3.invest) + " invested") +
-      tile("Projected 2032 terminal value − investment", usd(gain), usd(y3.tv) + " terminal value less " + usd(y3.invest) + " invested") +
+      tile("Projected Property Value Above Initial Cash Investment", usd(gain), "Before outstanding mortgage debt; not net profit. 2032: " + usd(y3.tv) + " terminal value less " + usd(y3.invest) + " invested", true) +
       tile("Projected 2032 multiple of capital", y3.moic.toFixed(2) + "× = " + Math.round(y3.moic*100).toLocaleString("en-US") + "%", "At 2032, on " + usd(y3.invest) + " invested");
 
     const changed = NUM.filter(k=>val(k)!==Number(sugg[k])).length + ($("hkm").value!==sugg.hkm?1:0);
@@ -653,12 +650,12 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
       row("Projected Net Operating Income", o=>o.noi, "tot") +
       sec("Projected Financing &amp; Value") +
       row("Projected Market Value", pre(o=>o.value)) +
-      row("Projected Total Investment <small>40% deposit, then 40% equity at closing</small>", pre(o=>o.invest)) +
-      row("Projected Annual Mortgage Payment <small>30-year, principal &amp; interest</small>", o=>o.mort) +
+      row(`Projected Total Investment <small>${cash?"40% deposit, then 100% cash at closing":"40% deposit, then 40% equity at closing"}</small>`, pre(o=>o.invest)) +
+      row(`Projected Annual Mortgage Payment <small>${cash?"none, cash purchase":"30-year, principal &amp; interest"}</small>`, o=>o.mort) +
       sec("Projected Returns") +
       row("Projected Cash Flow Before Taxes (a)", o=>o.cf, "star") +
       row("Projected Principal Repayment (b)", o=>o.prin) +
-      row("Projected Property Appreciation (c) <small>2030 includes 2027–2029</small>", pre(o=>o.appreciation)) +
+      row("Projected Property Appreciation (c) <small>that year only; 2027–2029 counted in cumulative return</small>", pre(o=>o.appreciation)) +
       row("Projected Total Annual Return (a+b+c)", pre(o=>o.total), "tot") +
       row("Projected Cumulative Return", pre(o=>o.cum)) +
       row("Projected Annual Return on Investment", pre(fmt(o=>o.retPct, v=>pct(v)))) +
@@ -681,6 +678,7 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
   document.querySelectorAll(".types button").forEach(b=>b.addEventListener("click",()=>chooseType(b.dataset.type)));
   $("plan").addEventListener("change", e=>{ S.unit = e.target.value; setSuggestions(); applySuggestions(["price"]); render(); });
   NUM.forEach(k=>$(k).addEventListener("input", render));
+  $("eq2").addEventListener("change", render);
   MONEY.forEach(k=>{
     $(k).addEventListener("input", e=>{
       const el = e.target, fromEnd = el.value.length - (el.selectionStart ?? el.value.length);
@@ -737,5 +735,4 @@ ul.notes{margin:6px 0 0;padding-left:16px;color:var(--muted);font-size:.78rem;di
 })();
 </script>
 
-</body>
-</html>
+</body></html>
